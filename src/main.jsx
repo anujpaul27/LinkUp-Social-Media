@@ -6,6 +6,7 @@ import Main from './Components/Main'
 import Feed_RightBar from './Components/Feed_RightBar'
 import Login from './Authenticatoin/Login'
 import Registration from './Authenticatoin/Registration'
+import ContextProvider from './Context/ContextProvider'
 
 
 const router = createBrowserRouter([
@@ -32,6 +33,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-      <RouterProvider router={router}></RouterProvider>
+      <ContextProvider>
+        <RouterProvider router={router}></RouterProvider>
+      </ContextProvider>
   </StrictMode>,
 )

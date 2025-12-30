@@ -1,4 +1,9 @@
+import { useContext } from "react";
+import { UserContext } from "../Context/ContextProvider";
+
 function Login() {
+  const {name} = useContext(UserContext);
+  console.log(name);
   function handleSubmit(event) {
     event.preventDefault();
     const form = event.target;
