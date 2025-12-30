@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../Context/ContextProvider";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function Login() {
   const [error,setError] = useState("")
@@ -15,7 +15,6 @@ function Login() {
 
     Login(Obj.email, Obj.password)
     .then(res=> {
-      console.log(res);
       navigation('/')
     })
     .catch(error=> {
@@ -64,7 +63,10 @@ function Login() {
           )}
 
           {/* Forget password */}
-          <button className="btn btn-link">Forget Password</button>
+          <div className="flex justify-between items-center">
+            <button className="btn btn-link">Forget Password</button>
+            <Link className="btn btn-link" to={'/registration'}>Registration</Link>
+          </div>
 
           {/* Buttons */}
           <div className="flex w-full gap-4 pt-4">

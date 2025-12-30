@@ -5,15 +5,20 @@ import auth from './AuthProvider';
 export const UserContext = createContext(null)
 
 const ContextProvider = ({children}) => {
-    const [CurrentUser,setCurrentUser] = useState([])
+    const [CurrentUser,setCurrentUser] = useState(null)
 
     useEffect(()=>{
-        const unsubscribe = onAuthStateChanged(auth,(currentUser)=>
+        const unsubscribe = onAuthStateChanged(auth,(user)=>
         {
-            if (currentUser)
-                console.log(currentUser.uid);
+            if (user)
+            {
+                setCurrentUser(user);
+                // console.log(user);
+            }
             else
-                console.log('User SignOut');
+            {
+                console.log('LogOut User');
+            }
         });
 
         return ()=> unsubscribe();
@@ -37,7 +42,8 @@ const ContextProvider = ({children}) => {
     const Obj = {
         SignUp,
         Login,
-        LogOut
+        LogOut,
+        CurrentUser
     }
     return (
         <UserContext.Provider value={Obj}>

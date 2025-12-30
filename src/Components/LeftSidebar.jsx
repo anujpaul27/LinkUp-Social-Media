@@ -117,7 +117,7 @@ const Sidebar = ({ darkMode, setDarkMode }) => {
             transition={{ delay: 0.6, duration: 0.1 }}
           >
             <Link to={'/logout'} className="flex items-center gap-4 text-lg py-3">
-              <span className="text-2xl">🔓</span>
+              <span className="text-2xl">🔒</span>
               LogOut
             </Link>
           </motion.li>

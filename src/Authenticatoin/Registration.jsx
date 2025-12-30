@@ -102,6 +102,18 @@ function Registration() {
               required
             />
           </div>
+
+          {/* Data Of birth Field */}
+          <div className="form-control">
+            <input
+              type="date"
+              name="DateOfBirth"
+              placeholder="Enter your DateOfBirth"
+              className="input input-bordered rounded-full w-full"
+              required
+            />
+          </div>
+
           {/* PhotoURL Field */}
           <div className="form-control">
             <input
@@ -112,7 +124,6 @@ function Registration() {
               required
             />
           </div>
-
           {/* Error Message */}
           {error && (
             <p className="text-red-500 text-sm font-semibold">{error}</p>

@@ -9,12 +9,13 @@ import Registration from './Authenticatoin/Registration'
 import ContextProvider from './Context/ContextProvider'
 import Friend from './LayOut/Friend'
 import LogOut from './Authenticatoin/LogOut'
+import PrivateRoute from './Authenticatoin/PrivateRoute'
 
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Main></Main>,
+    element: <PrivateRoute><Main></Main></PrivateRoute>,
     children: [
       {
         path: '/',
