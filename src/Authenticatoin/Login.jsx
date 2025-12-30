@@ -1,9 +1,11 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../Context/ContextProvider";
+import { useNavigate } from "react-router";
 
 function Login() {
   const [error,setError] = useState("")
   const {Login} = useContext(UserContext);
+  const navigation = useNavigate()
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -14,6 +16,7 @@ function Login() {
     Login(Obj.email, Obj.password)
     .then(res=> {
       console.log(res);
+      navigation('/')
     })
     .catch(error=> {
       setError(error.message);

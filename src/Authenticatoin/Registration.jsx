@@ -1,9 +1,11 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../Context/ContextProvider";
+import { useNavigate } from "react-router";
 
 function Registration() {
   const [error, setError] = useState("");
   const { SignUp } = useContext(UserContext);
+  const navigation = useNavigate()
 
   // Password validation function
   function validatePassword(password) {
@@ -48,6 +50,7 @@ function Registration() {
     SignUp(Obj.email, Obj.password)
       .then((res) => {
         console.log(res);
+        navigation('/login')
       })
       .catch((error) => {
         setError(error.message);
