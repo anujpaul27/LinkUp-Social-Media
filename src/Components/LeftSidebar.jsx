@@ -1,5 +1,7 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { delay, motion } from "framer-motion";
+import Friend from "../LayOut/Friend";
+import { Link } from "react-router";
 
 const menuItems = [
   { icon: "🏠", label: "Home", active: true },
@@ -11,6 +13,14 @@ const menuItems = [
 ];
 
 const Sidebar = ({ darkMode, setDarkMode }) => {
+  const [BtnName, setBtnName] = useState("Home");
+
+  function handleRightSideButton(btnName) {
+    console.log(BtnName);
+    setBtnName(btnName);
+    console.log(BtnName);
+  }
+
   return (
     <div className="drawer-side z-40">
       <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
@@ -27,22 +37,90 @@ const Sidebar = ({ darkMode, setDarkMode }) => {
           </div>
         </div>
 
-        {/* Menu Items */}
         <div className="flex-1">
-          {menuItems.map((item, index) => (
-            <motion.li
-              key={index}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className={item.active ? "bg-primary/20 rounded-lg" : ""}
+          {/* Home button */}
+          <motion.li
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.0, duration: 0.1 }}
+          >
+            <Link to={"/"} className="flex items-center gap-4 text-lg py-3">
+              <span className="text-2xl">🏠</span>
+              Home
+            </Link>
+          </motion.li>
+
+          {/* Friend Button */}
+          <motion.li
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2, duration: 0.1 }}
+          >
+            <Link
+              to={"/friend"}
+              className="flex items-center gap-4 text-lg py-3"
             >
-              <a className="flex items-center gap-4 text-lg py-3">
-                <span className="text-2xl">{item.icon}</span>
-                {item.label}
-              </a>
-            </motion.li>
-          ))}
+              <span className="text-2xl">👥</span>
+              Friend
+            </Link>
+          </motion.li>
+
+          {/* Message Button */}
+          <motion.li
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 0.1 }}
+          >
+            <Link
+              to={"/message"}
+              className="flex items-center gap-4 text-lg py-3"
+            >
+              <span className="text-2xl">💬</span>
+              Message
+            </Link>
+          </motion.li>
+
+          {/* Saved Button */}
+          <motion.li
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4, duration: 0.1 }}
+          >
+            <Link
+              to={"/saved"}
+              className="flex items-center gap-4 text-lg py-3"
+            >
+              <span className="text-2xl">⭐</span>
+              Saved
+            </Link>
+          </motion.li>
+
+          {/* Setting Button */}
+          <motion.li
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5, duration: 0.1 }}
+          >
+            <Link
+              to={"/setting"}
+              className="flex items-center gap-4 text-lg py-3"
+            >
+              <span className="text-2xl">⚙️</span>
+              Setting
+            </Link>
+          </motion.li>
+
+          {/* LogOut Button */}
+          <motion.li
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.6, duration: 0.1 }}
+          >
+            <Link to={'/logout'} className="flex items-center gap-4 text-lg py-3">
+              <span className="text-2xl">🔓</span>
+              LogOut
+            </Link>
+          </motion.li>
         </div>
 
         {/* Dark Mode Toggle */}

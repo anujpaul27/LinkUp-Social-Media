@@ -7,6 +7,8 @@ import Feed_RightBar from './Components/Feed_RightBar'
 import Login from './Authenticatoin/Login'
 import Registration from './Authenticatoin/Registration'
 import ContextProvider from './Context/ContextProvider'
+import Friend from './LayOut/Friend'
+import LogOut from './Authenticatoin/LogOut'
 
 
 const router = createBrowserRouter([
@@ -17,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Feed_RightBar></Feed_RightBar> 
+      },
+      {
+        path: '/friend',
+        element: <Friend></Friend>
       }
     ]
   },
@@ -27,7 +33,11 @@ const router = createBrowserRouter([
   {
     path: '/registration',
     element: <Registration></Registration>
-  }  
+  },
+  {
+    path: '/logout',
+    element: <LogOut></LogOut>
+  }
   
 ])
 
