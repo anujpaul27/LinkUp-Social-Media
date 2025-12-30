@@ -1,7 +1,9 @@
 import { useContext, useState } from "react";
+import { UserContext } from "../Context/ContextProvider";
 
 function Registration() {
   const [error, setError] = useState("");
+  const { SignUp } = useContext(UserContext);
 
   // Password validation function
   function validatePassword(password) {
@@ -29,32 +31,37 @@ function Registration() {
     return "";
   }
 
-  
   function handleSubmit(event) {
-      event.preventDefault();
+    event.preventDefault();
     const form = event.target;
-    const formValue = new FormData(form)
-    const Obj = Object.fromEntries(formValue.entries())
-    console.log(Obj);
-    
-    const Validation = validatePassword(Obj.password)
+    const formValue = new FormData(form);
+    const Obj = Object.fromEntries(formValue.entries());
+
+    const Validation = validatePassword(Obj.password);
     {
-        if(Validation)
-        {
-            setError(Validation)
-            return;
-        }
+      if (Validation) {
+        setError(Validation);
+        return;
+      }
     }
-    
+
+    SignUp(Obj.email, Obj.password)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
   }
 
   return (
-    <section className="py-16 bg-base-200">
-      <div className="max-w-md mx-auto bg-gray-800 p-8 rounded-xl shadow-2xl">
+    <section className="py-10 bg-base-200">
+      <div className="max-w-lg mx-auto bg-gray-800 p-8 lg:px-20 py-10 rounded-xl shadow-2xl">
         <h2 className="flex justify-center items-center gap-3 text-3xl font-bold text-center mb-8 text-primary">
           <img className="w-10" src="/LinkUpLogo.png" alt="logo" />
           <p className="text-pink-400">LinkUp</p>
-        </h2> 
+        </h2>
+
         <h2 className="text-3xl font-bold text-center mb-8 text-white bg-gray-700 rounded-full py-2">
           Registration
         </h2>
@@ -109,7 +116,7 @@ function Registration() {
           )}
 
           {/* Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
+          <div className="flex  gap-4 pt-4">
             <button
               type="submit"
               className="btn btn-primary flex-1 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all"

@@ -1,15 +1,24 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../Context/ContextProvider";
 
 function Login() {
-  const {name} = useContext(UserContext);
-  console.log(name);
+  const [error,setError] = useState("")
+  const {Login} = useContext(UserContext);
+
   function handleSubmit(event) {
     event.preventDefault();
     const form = event.target;
     const formValue = new FormData(form)
     const Obj = Object.fromEntries(formValue.entries())
-    console.log(Obj);
+
+    Login(Obj.email, Obj.password)
+    .then(res=> {
+      console.log(res);
+    })
+    .catch(error=> {
+      setError(error.message);
+    })
+
   }
 
   return (
@@ -47,9 +56,9 @@ function Login() {
           </div>
 
           {/* Error Message */}
-          {/* {error && (
+          {error && (
             <p className="text-red-500 text-sm font-semibold">{error}</p>
-          )} */}
+          )}
 
           {/* Forget password */}
           <button className="btn btn-link">Forget Password</button>
