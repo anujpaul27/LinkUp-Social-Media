@@ -4,6 +4,7 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import Main from './Components/Main'
 import Feed_RightBar from './Components/Feed_RightBar'
+import Login from './Authenticatoin/Login'
 
 
 const router = createBrowserRouter([
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       }
     ]
   },
+  {
+    path: '/login',
+    element: <Login></Login>
+  }
   
   
 ])
