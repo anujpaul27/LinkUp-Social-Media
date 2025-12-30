@@ -14,7 +14,7 @@ function Login() {
           <img className="w-10" src="/LinkUpLogo.png" alt="logo" />
           LinkUp
         </h2>
-        <h2 className="text-3xl font-bold text-center mb-8 text-primary bg-gray-700 rounded-full py-2">
+        <h2 className="text-3xl font-bold text-center mb-8 text-white bg-gray-700 rounded-full py-2">
           Login
         </h2>
 

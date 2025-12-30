@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router'
 import Main from './Components/Main'
 import Feed_RightBar from './Components/Feed_RightBar'
 import Login from './Authenticatoin/Login'
+import Registration from './Authenticatoin/Registration'
 
 
 const router = createBrowserRouter([
@@ -21,8 +22,11 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login></Login>
-  }
-  
+  },
+  {
+    path: '/registration',
+    element: <Registration></Registration>
+  }  
   
 ])
 
