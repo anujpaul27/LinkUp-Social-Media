@@ -20,6 +20,10 @@ const posts = [
 ];
 
 const Feed = () => {
+  function handleCreatePost ()
+  {
+    alert("dont it")
+  }
   return (
     <div className="flex-1 max-w-2xl mx-auto py-8 px-4">
       {/* Create Post Box */}
@@ -39,7 +43,7 @@ const Feed = () => {
           </div>
           <div className="divider my-2"></div>
           <div className="flex justify-around">
-            <button className="btn btn-ghost gap-2">
+            <button onClick={handleCreatePost} className="btn btn-ghost gap-2">
               <span>📷</span> Photo/Video
             </button>
             <button className="btn btn-ghost gap-2">

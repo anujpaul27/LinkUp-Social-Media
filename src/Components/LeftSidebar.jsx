@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { delay, motion } from "framer-motion";
-import Friend from "../LayOut/Friend";
+import Friend from "../LayOut/Profile";
 import { Link } from "react-router";
 
 const menuItems = [
@@ -62,6 +62,21 @@ const Sidebar = ({ darkMode, setDarkMode }) => {
             >
               <span className="text-2xl">👥</span>
               Friend
+            </Link>
+          </motion.li>
+
+          {/* Profile Button */}
+          <motion.li
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 0.1 }}
+          >
+            <Link
+              to={"/profile"}
+              className="flex items-center gap-4 text-lg py-3"
+            >
+              <span className="text-2xl">👤 </span>
+              Profile
             </Link>
           </motion.li>
 

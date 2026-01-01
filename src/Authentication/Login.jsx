@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
-import { UserContext } from "../Context/ContextProvider";
 import { Link, useNavigate } from "react-router";
+import { UserContext } from "../Context/ContextProvider";
 
 function Login() {
   const [error,setError] = useState("")
-  const {Login} = useContext(UserContext);
   const navigation = useNavigate()
+  const {login} = useContext(UserContext) 
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -13,7 +13,7 @@ function Login() {
     const formValue = new FormData(form)
     const Obj = Object.fromEntries(formValue.entries())
 
-    Login(Obj.email, Obj.password)
+    login(Obj.email, Obj.password)
     .then(res=> {
       navigation('/')
     })

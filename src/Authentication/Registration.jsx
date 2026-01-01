@@ -1,10 +1,11 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../Context/ContextProvider";
 import { useNavigate } from "react-router";
+import axios from 'axios';
 
 function Registration() {
   const [error, setError] = useState("");
-  const { SignUp } = useContext(UserContext);
+  const { SignUp,SignOut} = useContext(UserContext);
   const navigation = useNavigate()
 
   // Password validation function
@@ -49,8 +50,12 @@ function Registration() {
 
     SignUp(Obj.email, Obj.password)
       .then((res) => {
-        console.log(res);
+        Obj.uid = res.user.uid;        
+        axios
+        axios.post('http://localhost:5000/users',Obj)
+        .then (data=> console.log(data))
         navigation('/login')
+        SignOut();
       })
       .catch((error) => {
         setError(error.message);

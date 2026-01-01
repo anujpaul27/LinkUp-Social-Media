@@ -4,12 +4,13 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import Main from './Components/Main'
 import Feed_RightBar from './Components/Feed_RightBar'
-import Login from './Authenticatoin/Login'
-import Registration from './Authenticatoin/Registration'
+import Login from './Authentication/Login'
+import Registration from './Authentication/Registration'
 import ContextProvider from './Context/ContextProvider'
-import Friend from './LayOut/Friend'
-import LogOut from './Authenticatoin/LogOut'
-import PrivateRoute from './Authenticatoin/PrivateRoute'
+import PrivateRoute from './Authentication/PrivateRoute'
+import Profile from './LayOut/Profile'
+import LogOut from './Authentication/LogOut'
+import Friends from './LayOut/Friends'
 
 
 const router = createBrowserRouter([
@@ -22,8 +23,12 @@ const router = createBrowserRouter([
         element: <Feed_RightBar></Feed_RightBar> 
       },
       {
-        path: '/friend',
-        element: <Friend></Friend>
+        path: '/profile',
+        element: <Profile></Profile>
+      },
+      {
+        path: 'friend',
+        element: <Friends></Friends>
       }
     ]
   },

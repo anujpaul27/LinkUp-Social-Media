@@ -3,12 +3,12 @@ import { UserContext } from "../Context/ContextProvider";
 import { useNavigate } from "react-router";
 
 const LogOut = () => {
-  const { LogOut } = useContext(UserContext);
+  const { SignOut } = useContext(UserContext);
   const navigation = useNavigate();
   useEffect(() => {
-    LogOut();
+    SignOut();
     navigation("/login");
-  }, [LogOut,navigation]);
+  }, [SignOut,navigation]);
   return <div></div>;
 };
 
