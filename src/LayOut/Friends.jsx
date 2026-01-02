@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { delay, motion } from "framer-motion";
 
 const Friends = () => {
   const [allFriend, setFriend] = useState([]);
@@ -8,22 +9,27 @@ const Friends = () => {
     axios.get(`http://localhost:5000/users`).then((res) => setFriend(res.data));
   }, []);
 
-  useEffect(()=>{
-    setActive(Array(allFriend.length).fill(false))
-  },[allFriend])
+  useEffect(() => {
+    setActive(Array(allFriend.length).fill(false));
+  }, [allFriend]);
 
-  function handleFollowBtn (i)
-  {
-    const copy = [...active]
-    copy[i] = !copy[i]
-    setActive(copy)
+  function handleFollowBtn(i) {
+    const copy = [...active];
+    copy[i] = !copy[i];
+    setActive(copy);
   }
 
   return (
     <>
       {allFriend.map((user, index) => {
         return (
-          <div key={index} className="w-3/4 mx-auto bg-gray-800 py-2 px-2 rounded-lg mt-4">
+          <motion.div
+            initial={{ opacity: 0, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            key={index}
+            className="w-3/4 mx-auto bg-gray-800 py-2 px-2 rounded-lg mt-4"
+          >
             {/* User */}
             <div className="flex items-center space-x-4  ">
               <div className="flex-shrink-0">
@@ -46,14 +52,16 @@ const Friends = () => {
               </div>
               <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
                 <button
-                onClick={()=> handleFollowBtn(index)}
-                className={`btn ${active[index]? 'btn-secondary': 'btn-outline'}`}
+                  onClick={() => handleFollowBtn(index)}
+                  className={`btn ${
+                    !active[index] ? "btn-secondary" : "btn-outline"
+                  }`}
                 >
-                    {active[index]? 'follow':'unfollow'}
+                  {!active[index] ? "follow" : "unfollow"}
                 </button>
               </div>
             </div>
-          </div>
+          </motion.div>
         );
       })}
     </>

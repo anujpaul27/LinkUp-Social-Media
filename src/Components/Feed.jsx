@@ -1,29 +1,54 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
-const posts = [
-  {
-    id: 1,
-    name: "Anastasia Vivent",
-    time: "2h",
-    text: "Travel is the only thing you buy that makes you richer 🌆✨",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 2,
-    name: "Home Mary",
-    time: "5h",
-    text: "Just finished my morning coffee ritual ☕",
-    image: "https://i.pinimg.com/236x/7f/8d/32/7f8d32503f173e65d8acbdc8ca339c68.jpg",
-  },
-  // Add more as needed
-];
+import { UserContext } from "../Context/ContextProvider";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 const Feed = () => {
-  function handleCreatePost ()
-  {
-    alert("dont it")
+  const { DBUser,allPosts } = useContext(UserContext);
+  
+
+  // Create and post 
+  function handleCreatePost() {
+    Swal.fire({
+      title: "Create a Post",
+      html: `
+    <textarea id="postText" class="swal2-textarea" placeholder="Enter post description"></textarea>
+    <input id="imageLink" class="swal2-input" placeholder="Enter image link">
+  `,
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonText: "Done",
+      preConfirm: () => {
+        const postText = document.getElementById("postText").value;
+        const imageLink = document.getElementById("imageLink").value;
+
+        if (!postText || !imageLink) {
+          Swal.showValidationMessage("Both fields are required!");
+          return null;
+        }
+
+        const createPost = {
+          uid:DBUser?.uid,
+          userName: DBUser.name,
+          userPhoto: DBUser.photoURL,
+          postText,
+          imageLink,
+          like: [],
+          createAt: new Date().toDateString()
+        }
+
+        axios.post(`http://localhost:5000/post`,createPost)
+        .then(res=> console.log(res.data))
+        .catch(error=> console.log(error))
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log("Create a post Success:", result.value);
+      }
+    });
   }
+
   return (
     <div className="flex-1 max-w-2xl mx-auto py-8 px-4">
       {/* Create Post Box */}
@@ -32,10 +57,11 @@ const Feed = () => {
           <div className="flex items-center gap-3">
             <div className="avatar">
               <div className="w-12 rounded-full">
-                <img src="https://i.pravatar.cc/300" alt="User" />
+                <img src={DBUser?.photoURL} alt="User" />
               </div>
             </div>
             <input
+              onClick={handleCreatePost}
               type="text"
               placeholder="What's on your mind?"
               className="input input-bordered flex-1 bg-base-200"
@@ -46,7 +72,7 @@ const Feed = () => {
             <button onClick={handleCreatePost} className="btn btn-ghost gap-2">
               <span>📷</span> Photo/Video
             </button>
-            <button className="btn btn-ghost gap-2">
+            <button onClick={handleCreatePost} className="btn btn-ghost gap-2">
               <span>😊</span> Feeling/Activity
             </button>
           </div>
@@ -54,9 +80,9 @@ const Feed = () => {
       </div>
 
       {/* Posts */}
-      {posts.map((post) => (
+      {allPosts.map((post) => (
         <motion.div
-          key={post.id}
+          key={post._id}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -67,23 +93,23 @@ const Feed = () => {
               <div className="flex items-center gap-3">
                 <div className="avatar">
                   <div className="w-12 rounded-full">
-                    <img src="https://i.pravatar.cc/300" alt="User" />
+                    <img src={post?.userPhoto} alt="User" />
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-semibold">{post.name}</h3>
-                  <p className="text-sm opacity-70">{post.time} · 🌐</p>
+                  <h3 className="font-semibold">{post?.userName}</h3>
+                  <p className="text-sm opacity-70">{post?.createAt} · 🌐</p>
                 </div>
               </div>
               <button className="btn btn-ghost btn-sm btn-circle">⋯</button>
             </div>
 
-            <p className="mt-4 text-lg">{post.text}</p>
+            <p className="mt-4 text-lg">{post?.postText}</p>
 
-            {post.image && (
+            {post.imageLink && (
               <figure className="mt-4">
                 <img
-                  src={post.image}
+                  src={post?.imageLink}
                   alt="Post"
                   className="w-full rounded-xl object-cover max-h-[500px]"
                 />
@@ -94,12 +120,8 @@ const Feed = () => {
               <button className="btn btn-ghost flex-1 gap-2 hover:bg-red-50 hover:text-red-600">
                 ❤️ Like
               </button>
-              <button className="btn btn-ghost flex-1 gap-2">
-                💬 Comment
-              </button>
-              <button className="btn btn-ghost flex-1 gap-2">
-                🔄 Share
-              </button>
+              <button className="btn btn-ghost flex-1 gap-2">💬 Comment</button>
+              <button className="btn btn-ghost flex-1 gap-2">🔄 Share</button>
             </div>
           </div>
         </motion.div>

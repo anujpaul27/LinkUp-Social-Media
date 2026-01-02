@@ -11,6 +11,7 @@ import PrivateRoute from './Authentication/PrivateRoute'
 import Profile from './LayOut/Profile'
 import LogOut from './Authentication/LogOut'
 import Friends from './LayOut/Friends'
+import EditProfile from './User/EditProfile'
 
 
 const router = createBrowserRouter([
@@ -27,7 +28,11 @@ const router = createBrowserRouter([
         element: <Profile></Profile>
       },
       {
-        path: 'friend',
+        path:'editprofile',
+        element: <EditProfile></EditProfile>
+      },
+      {
+        path: '/friend',
         element: <Friends></Friends>
       }
     ]

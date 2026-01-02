@@ -1,25 +1,11 @@
-import React, { useState } from "react";
-import { delay, motion } from "framer-motion";
-import Friend from "../LayOut/Profile";
-import { Link } from "react-router";
 
-const menuItems = [
-  { icon: "🏠", label: "Home", active: true },
-  { icon: "👥", label: "Friends" },
-  { icon: "🔔", label: "Notifications" },
-  { icon: "💬", label: "Messages" },
-  { icon: "⭐", label: "Saved" },
-  { icon: "⚙️", label: "Settings" },
-];
+import { delay, motion } from "framer-motion";
+import { useContext } from "react";
+import { Link } from "react-router";
+import { UserContext } from "../Context/ContextProvider";
 
 const Sidebar = ({ darkMode, setDarkMode }) => {
-  const [BtnName, setBtnName] = useState("Home");
-
-  function handleRightSideButton(btnName) {
-    console.log(BtnName);
-    setBtnName(btnName);
-    console.log(BtnName);
-  }
+const {DBUser} = useContext(UserContext)
 
   return (
     <div className="drawer-side z-40">
@@ -30,10 +16,10 @@ const Sidebar = ({ darkMode, setDarkMode }) => {
           <div className="flex items-center gap-3 px-4 py-3">
             <div className="avatar">
               <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img src="https://i.pravatar.cc/300" alt="User" />
+                <img src={DBUser?.photoURL} alt="User" />
               </div>
             </div>
-            <span className="font-bold text-xl">Anastasia</span>
+            <span className="font-bold text-xl">{DBUser?.name}</span>
           </div>
         </div>
 
