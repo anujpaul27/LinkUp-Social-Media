@@ -11,12 +11,11 @@ import axios from "axios";
 export const UserContext = createContext(null);
 
 const ContextProvider = ({ children }) => {
-  const [darkMode, setDarkMode] = useState(true);
   const [CurrentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [DBUser, setDBUser] = useState(null);
-  const [allPosts, setAllPosts] = useState([]);
-  const [userPosts, setUserPosts] = useState([])
+  
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -39,20 +38,9 @@ const ContextProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  // Get all post
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/post`)
-      .then((res) => setAllPosts(res.data))
-      .catch((error) => console.log("Error from get posts.", error.message));
-  }, []);
+  
 
-  // Get User Post
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/post/${DBUser?.uid}`)
-      .then((res) => setUserPosts(res.data));
-  }, [DBUser?.uid]);
+  
 
   function SignUp(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -71,12 +59,8 @@ const ContextProvider = ({ children }) => {
     login,
     SignOut,
     CurrentUser,
-    darkMode,
-    setDarkMode,
     loading,
     DBUser,
-    allPosts,
-    userPosts
   };
   return <UserContext.Provider value={Obj}>{children}</UserContext.Provider>;
 };

@@ -5,10 +5,18 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 const Feed = () => {
-  const { DBUser,allPosts } = useContext(UserContext);
-  
+  const { DBUser } = useContext(UserContext);
+  const [allPosts, setAllPosts] = useState([]);
 
-  // Create and post 
+  // Get all post
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/post`)
+      .then((res) => setAllPosts(res.data))
+      .catch((error) => console.log("Error from get posts.", error.message));
+  }, []);
+
+  // Create and post
   function handleCreatePost() {
     Swal.fire({
       title: "Create a Post",
@@ -29,18 +37,19 @@ const Feed = () => {
         }
 
         const createPost = {
-          uid:DBUser?.uid,
+          uid: DBUser?.uid,
           userName: DBUser.name,
           userPhoto: DBUser.photoURL,
           postText,
           imageLink,
           like: [],
-          createAt: new Date().toDateString()
-        }
+          createAt: new Date().toDateString(),
+        };
 
-        axios.post(`http://localhost:5000/post`,createPost)
-        .then(res=> console.log(res.data))
-        .catch(error=> console.log(error))
+        axios
+          .post(`http://localhost:5000/post`, createPost)
+          .then((res) => console.log(res.data))
+          .catch((error) => console.log(error));
       },
     }).then((result) => {
       if (result.isConfirmed) {

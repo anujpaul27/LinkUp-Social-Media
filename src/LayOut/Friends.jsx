@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { delay, motion } from "framer-motion";
+import { UserContext } from "../Context/ContextProvider";
 
 const Friends = () => {
   const [allFriend, setFriend] = useState([]);
   const [active, setActive] = useState([]);
+  const {DBUser} = useContext(UserContext)
+
   useEffect(() => {
     axios.get(`http://localhost:5000/users`).then((res) => setFriend(res.data));
   }, []);
@@ -40,14 +43,14 @@ const Friends = () => {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xl font-medium light:text-gray-900 truncate dark:text-white">
+                <p className=" text-xl font-medium light:text-gray-900 truncate dark:text-white">
                   {user?.name}
                 </p>
-                <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                  From:
+                <p className="text-sm text-gray-500 truncate dark:text-gray-400 mt-1">
+                  From {DBUser?.address}
                 </p>
-                <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                  Work at:
+                <p className="text-sm text-gray-500 truncate dark:text-gray-400 mt-1">
+                  Work at {DBUser?.workAt}
                 </p>
               </div>
               <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
