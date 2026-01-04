@@ -51,9 +51,14 @@ function Registration() {
     SignUp(Obj.email, Obj.password)
       .then((res) => {
         Obj.uid = res.user.uid;        
-        axios
         axios.post('http://localhost:5000/users',Obj)
-        .then (data=> console.log(data))
+        .then (data=> console.log('Register user post success with this user',data.data))
+
+        // Post Flowing empty data post
+        const friendObj = {uid:res?.user?.uid, following:[], followers:[]}
+        axios.post(`http://localhost:5000/following`,friendObj)
+        .then(res=> console.log('post following data',res.data))
+        
         navigation('/login')
         SignOut();
       })

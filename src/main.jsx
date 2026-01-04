@@ -12,6 +12,7 @@ import Profile from './LayOut/Profile'
 import LogOut from './Authentication/LogOut'
 import Friends from './LayOut/Friends'
 import EditProfile from './User/EditProfile'
+import OtherProfile from './LayOut/OtherProfile'
 
 
 const router = createBrowserRouter([
@@ -34,6 +35,11 @@ const router = createBrowserRouter([
       {
         path: '/friend',
         element: <Friends></Friends>
+      },
+      {
+        path: '/otherprofile/:uid',
+        element: <OtherProfile></OtherProfile>,
+        loader: ()=> fetch(`http://localhost:5000/users${params.uid}`)
       }
     ]
   },

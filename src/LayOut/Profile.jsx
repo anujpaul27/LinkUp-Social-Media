@@ -7,6 +7,7 @@ import axios from "axios";
 const Profile = () => {
   const { DBUser} = useContext(UserContext);
   const [userPosts, setUserPosts] = useState([])
+  const [following, setFollowing] = useState([])
   // Sample user data (you can fetch from Firebase/MongoDB)
   const user = {
     name: "Samantha Jones",
@@ -29,6 +30,12 @@ const Profile = () => {
       .get(`http://localhost:5000/post/${DBUser?.uid}`)
       .then((res) => setUserPosts(res.data));
   }, [DBUser?.uid]);
+
+  // Get Following 
+  useEffect(()=>{
+    axios.get(`http://localhost:5000/following/${DBUser?.uid}`)
+    .then(res=> setFollowing(res.data))
+  },[DBUser?.uid])
 
   return (
     <div className="min-h-screen bg-base-200">
@@ -113,11 +120,11 @@ const Profile = () => {
           {/* Follow Stats */}
           <div className="mt-6 flex gap-8">
             <div>
-              <span className="font-bold text-xl">{user.following}</span>
+              <span className="font-bold text-xl">{following?.following?.length}</span>
               <span className="text-base-content/60 ml-2">Following</span>
             </div>
             <div>
-              <span className="font-bold text-xl">{user.followers}</span>
+              <span className="font-bold text-xl">{following?.followers?.length}</span>
               <span className="text-base-content/60 ml-2">Followers</span>
             </div>
             <div>

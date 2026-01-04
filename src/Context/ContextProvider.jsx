@@ -15,7 +15,6 @@ const ContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [DBUser, setDBUser] = useState(null);
   
-  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -38,9 +37,6 @@ const ContextProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  
-
-  
 
   function SignUp(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);

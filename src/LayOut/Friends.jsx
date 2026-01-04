@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { delay, motion } from "framer-motion";
 import { UserContext } from "../Context/ContextProvider";
+import { Link } from "react-router";
 
 const Friends = () => {
   const [allFriend, setFriend] = useState([]);
   const [active, setActive] = useState([]);
-  const {DBUser} = useContext(UserContext)
+  const { DBUser } = useContext(UserContext);
 
   useEffect(() => {
     axios.get(`http://localhost:5000/users`).then((res) => setFriend(res.data));
@@ -16,10 +17,19 @@ const Friends = () => {
     setActive(Array(allFriend.length).fill(false));
   }, [allFriend]);
 
-  function handleFollowBtn(i) {
+  function handleFollowBtn(i, FollowingUserUid) {
     const copy = [...active];
     copy[i] = !copy[i];
     setActive(copy);
+
+    // Update Following count each user
+    if (copy[i]) {
+      axios
+        .patch(`http://localhost:5000/following/${DBUser?.uid}`, {
+          FollowingUserUid,
+        })
+        .then((res) => console.log(res.data));
+    }
   }
 
   return (
@@ -36,26 +46,31 @@ const Friends = () => {
             {/* User */}
             <div className="flex items-center space-x-4  ">
               <div className="flex-shrink-0">
-                <img
-                  className="w-20 rounded-full"
-                  src={user?.photoURL}
-                  alt=""
-                />
+                <Link onClick={() => handleClickableProfile(user?.uid)}>
+                  <img
+                    className="w-20 rounded-full"
+                    src={user?.photoURL}
+                    alt="profile photo"
+                  />
+                </Link>
               </div>
               <div className="flex-1 min-w-0">
                 <p className=" text-xl font-medium light:text-gray-900 truncate dark:text-white">
-                  {user?.name}
+                  <Link onClick={() => handleClickableProfile(user?.uid)}>
+                    {" "}
+                    {user?.name}{" "}
+                  </Link>
                 </p>
                 <p className="text-sm text-gray-500 truncate dark:text-gray-400 mt-1">
-                  From {DBUser?.address}
+                  From {user?.address}
                 </p>
                 <p className="text-sm text-gray-500 truncate dark:text-gray-400 mt-1">
-                  Work at {DBUser?.workAt}
+                  Work at {user?.workAt}
                 </p>
               </div>
               <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
                 <button
-                  onClick={() => handleFollowBtn(index)}
+                  onClick={() => handleFollowBtn(index, user?.uid)}
                   className={`btn ${
                     !active[index] ? "btn-secondary" : "btn-outline"
                   }`}
