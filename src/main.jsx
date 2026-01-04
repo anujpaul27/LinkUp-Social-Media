@@ -13,6 +13,7 @@ import LogOut from './Authentication/LogOut'
 import Friends from './LayOut/Friends'
 import EditProfile from './User/EditProfile'
 import OtherProfile from './LayOut/OtherProfile'
+import axios from 'axios'
 
 
 const router = createBrowserRouter([
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
       {
         path: '/otherprofile/:uid',
         element: <OtherProfile></OtherProfile>,
-        loader: ()=> fetch(`http://localhost:5000/users${params.uid}`)
+        loader: ({params}) => fetch(`http://localhost:5000/users/${params.uid}`)
       }
     ]
   },

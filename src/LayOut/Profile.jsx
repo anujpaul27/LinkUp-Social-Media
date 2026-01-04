@@ -38,7 +38,7 @@ const Profile = () => {
   },[DBUser?.uid])
 
   return (
-    <div className="min-h-screen bg-base-200">
+    <div className="min-h-screen bg-base-200 ">
       {/* Cover Photo */}
       <div className="relative h-64 md:h-40 lg:h-60">
         <img
@@ -128,7 +128,7 @@ const Profile = () => {
               <span className="text-base-content/60 ml-2">Followers</span>
             </div>
             <div>
-              <span className="font-bold text-xl">{user.posts}</span>
+              <span className="font-bold text-xl">{userPosts?.length}</span>
               <span className="text-base-content/60 ml-2">Posts</span>
             </div>
           </div>

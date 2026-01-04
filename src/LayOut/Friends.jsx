@@ -3,6 +3,7 @@ import axios from "axios";
 import { delay, motion } from "framer-motion";
 import { UserContext } from "../Context/ContextProvider";
 import { Link } from "react-router";
+import OtherProfile from "./OtherProfile";
 
 const Friends = () => {
   const [allFriend, setFriend] = useState([]);
@@ -32,6 +33,11 @@ const Friends = () => {
     }
   }
 
+  function handleClickableProfile(uid) {
+    console.log(uid);
+    <OtherProfile uid={uid}></OtherProfile>;
+  }
+
   return (
     <>
       {allFriend.map((user, index) => {
@@ -46,9 +52,9 @@ const Friends = () => {
             {/* User */}
             <div className="flex items-center space-x-4  ">
               <div className="flex-shrink-0">
-                <Link onClick={() => handleClickableProfile(user?.uid)}>
+                <Link to={`/otherprofile/${user?.uid}`}>
                   <img
-                    className="w-20 rounded-full"
+                    className="w-20 rounded-full "
                     src={user?.photoURL}
                     alt="profile photo"
                   />
@@ -56,10 +62,7 @@ const Friends = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <p className=" text-xl font-medium light:text-gray-900 truncate dark:text-white">
-                  <Link onClick={() => handleClickableProfile(user?.uid)}>
-                    {" "}
-                    {user?.name}{" "}
-                  </Link>
+                  <Link to={`/otherprofile/${user?.uid}`}> {user?.name} </Link>
                 </p>
                 <p className="text-sm text-gray-500 truncate dark:text-gray-400 mt-1">
                   From {user?.address}
