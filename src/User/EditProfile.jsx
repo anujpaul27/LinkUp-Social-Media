@@ -5,8 +5,8 @@ import { UserContext } from "../Context/ContextProvider";
 import axios from "axios";
 import { useNavigate } from "react-router";
 export default function EditProfile() {
-  const {DBUser} = useContext(UserContext);
-  const navigation = useNavigate()
+  const { DBUser } = useContext(UserContext);
+  const navigation = useNavigate();
 
   function handleEditProfile(e) {
     e.preventDefault();
@@ -20,7 +20,8 @@ export default function EditProfile() {
     if (DBUser?.phone_number !== Obj.phone_number)
       updatedUser.phone_number = Obj.phone_number;
     if (DBUser?.bio !== Obj.bio) updatedUser.bio = Obj.bio;
-    if (DBUser?.DateOfBirth !== Obj.DateOfBirth) updatedUser.DateOfBirth = Obj.DateOfBirth;
+    if (DBUser?.DateOfBirth !== Obj.DateOfBirth)
+      updatedUser.DateOfBirth = Obj.DateOfBirth;
     if (DBUser?.workAt !== Obj.workAt) updatedUser.workAt = Obj.workAt;
 
     axios
@@ -30,7 +31,7 @@ export default function EditProfile() {
           title: "Profile Update Successful.",
           icon: "success",
         });
-        navigation('/profile')
+        navigation("/profile");
       })
       .catch((error) => {
         console.log(error.message);
@@ -210,7 +211,7 @@ export default function EditProfile() {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
                 class="size-6"
               >
@@ -325,7 +326,6 @@ export default function EditProfile() {
             />
           </div>
         </div>
-
 
         {/* Bio */}
         <div className="relative mb-2">

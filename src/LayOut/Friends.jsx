@@ -4,14 +4,18 @@ import { delay, motion } from "framer-motion";
 import { UserContext } from "../Context/ContextProvider";
 import { Link } from "react-router";
 import OtherProfile from "./OtherProfile";
+import useAxios from "../Context/useAxios";
 
 const Friends = () => {
   const [allFriend, setFriend] = useState([]);
   const [active, setActive] = useState([]);
   const { DBUser } = useContext(UserContext);
+  const axiosSecure = useAxios()
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/users`).then((res) => setFriend(res.data));
+    // axios.get(`http://localhost:5000/users`,{withCredentials:true}).then((res) => setFriend(res.data));
+    axiosSecure.get('/users')
+    .then(res=> setFriend(res.data))
   }, []);
 
   useEffect(() => {

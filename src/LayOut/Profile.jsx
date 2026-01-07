@@ -5,9 +5,9 @@ import { Link } from "react-router";
 import axios from "axios";
 
 const Profile = () => {
-  const { DBUser} = useContext(UserContext);
-  const [userPosts, setUserPosts] = useState([])
-  const [following, setFollowing] = useState([])
+  const { DBUser } = useContext(UserContext);
+  const [userPosts, setUserPosts] = useState([]);
+  const [following, setFollowing] = useState([]);
   // Sample user data (you can fetch from Firebase/MongoDB)
   const user = {
     name: "Samantha Jones",
@@ -31,18 +31,19 @@ const Profile = () => {
       .then((res) => setUserPosts(res.data));
   }, [DBUser?.uid]);
 
-  // Get Following 
-  useEffect(()=>{
-    axios.get(`http://localhost:5000/following/${DBUser?.uid}`)
-    .then(res=> setFollowing(res.data))
-  },[DBUser?.uid])
+  // Get Following
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/following/${DBUser?.uid}`)
+      .then((res) => setFollowing(res.data));
+  }, [DBUser?.uid]);
 
   return (
     <div className="min-h-screen bg-base-200 ">
       {/* Cover Photo */}
       <div className="relative h-64 md:h-40 lg:h-60">
         <img
-          src={'https://picsum.photos/2000/500?random=1'}
+          src={"https://picsum.photos/2000/500?random=1"}
           alt="Cover"
           className="w-full h-full object-cover"
         />
@@ -76,7 +77,7 @@ const Profile = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
                 class="size-6"
               >
@@ -95,18 +96,39 @@ const Profile = () => {
               {DBUser?.address}
             </div>
             <div className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z" />
-            </svg>
-              Work at {' '}   
-              {DBUser?.workAt}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z"
+                />
+              </svg>
+              Work at {DBUser?.workAt}
             </div>
           </div>
           <div className="mt-4 flex flex-wrap gap-6 text-base-content/70">
             <div className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75-1.5.75a3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0L3 16.5m15-3.379a48.474 48.474 0 0 0-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 0 1 3 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 0 1 6 13.12M12.265 3.11a.375.375 0 1 1-.53 0L12 2.845l.265.265Zm-3 0a.375.375 0 1 1-.53 0L9 2.845l.265.265Zm6 0a.375.375 0 1 1-.53 0L15 2.845l.265.265Z" />
-            </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75-1.5.75a3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0L3 16.5m15-3.379a48.474 48.474 0 0 0-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 0 1 3 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 0 1 6 13.12M12.265 3.11a.375.375 0 1 1-.53 0L12 2.845l.265.265Zm-3 0a.375.375 0 1 1-.53 0L9 2.845l.265.265Zm6 0a.375.375 0 1 1-.53 0L15 2.845l.265.265Z"
+                />
+              </svg>
               {DBUser?.DateOfBirth}
             </div>
             <div className="flex items-center gap-2">
@@ -120,11 +142,15 @@ const Profile = () => {
           {/* Follow Stats */}
           <div className="mt-6 flex gap-8">
             <div>
-              <span className="font-bold text-xl">{following?.following?.length}</span>
+              <span className="font-bold text-xl">
+                {following?.following?.length}
+              </span>
               <span className="text-base-content/60 ml-2">Following</span>
             </div>
             <div>
-              <span className="font-bold text-xl">{following?.followers?.length}</span>
+              <span className="font-bold text-xl">
+                {following?.followers?.length}
+              </span>
               <span className="text-base-content/60 ml-2">Followers</span>
             </div>
             <div>
@@ -152,52 +178,54 @@ const Profile = () => {
         </div>
 
         {/* Posts */}
-      {userPosts?.map((post) => (
-        <motion.div
-          key={post?._id}
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="card bg-base-100 shadow-xl mb-6 hover:shadow-2xl transition-shadow"
-        >
-          <div className="card-body">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="avatar">
-                  <div className="w-12 rounded-full">
-                    <img src={post?.userPhoto} alt="User" />
+        {userPosts?.map((post) => (
+          <motion.div
+            key={post?._id}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="card bg-base-100 shadow-xl mb-6 hover:shadow-2xl transition-shadow"
+          >
+            <div className="card-body">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="avatar">
+                    <div className="w-12 rounded-full">
+                      <img src={post?.userPhoto} alt="User" />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">{post?.userName}</h3>
+                    <p className="text-sm opacity-70">{post?.createAt} · 🌐</p>
                   </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold">{post?.userName}</h3>
-                  <p className="text-sm opacity-70">{post?.createAt} · 🌐</p>
-                </div>
+                <button className="btn btn-ghost btn-sm btn-circle">⋯</button>
               </div>
-              <button className="btn btn-ghost btn-sm btn-circle">⋯</button>
+
+              <p className="mt-4 text-lg">{post?.postText}</p>
+
+              {post?.imageLink && (
+                <figure className="mt-4">
+                  <img
+                    src={post?.imageLink}
+                    alt="Post"
+                    className="w-full rounded-xl object-cover max-h-[500px]"
+                  />
+                </figure>
+              )}
+
+              <div className="flex justify-between mt-4 pt-4 border-t">
+                <button className="btn btn-ghost flex-1 gap-2 hover:bg-red-50 hover:text-red-600">
+                  ❤️ Like
+                </button>
+                <button className="btn btn-ghost flex-1 gap-2">
+                  💬 Comment
+                </button>
+                <button className="btn btn-ghost flex-1 gap-2">🔄 Share</button>
+              </div>
             </div>
-
-            <p className="mt-4 text-lg">{post?.postText}</p>
-
-            {post?.imageLink && (
-              <figure className="mt-4">
-                <img
-                  src={post?.imageLink}
-                  alt="Post"
-                  className="w-full rounded-xl object-cover max-h-[500px]"
-                />
-              </figure>
-            )}
-
-            <div className="flex justify-between mt-4 pt-4 border-t">
-              <button className="btn btn-ghost flex-1 gap-2 hover:bg-red-50 hover:text-red-600">
-                ❤️ Like
-              </button>
-              <button className="btn btn-ghost flex-1 gap-2">💬 Comment</button>
-              <button className="btn btn-ghost flex-1 gap-2">🔄 Share</button>
-            </div>
-          </div>
-        </motion.div>
-      ))}
+          </motion.div>
+        ))}
       </div>
     </div>
   );

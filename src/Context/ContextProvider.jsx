@@ -7,6 +7,7 @@ import {
 import React, { createContext, useEffect, useState } from "react";
 import auth from "./AuthProvider";
 import axios from "axios";
+import useAxios from "./useAxios";
 
 export const UserContext = createContext(null);
 
@@ -14,17 +15,27 @@ const ContextProvider = ({ children }) => {
   const [CurrentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [DBUser, setDBUser] = useState(null);
-  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUser(user);
+
+        // axios.post('http://localhost:5000/jwt',user,{withCredentials:true})
+        // .then(res=> console.log(res.data))
+        
+        // Create JWT Authentication
+        axios.post('http://localhost:5000/jwt',user,{withCredentials:true})
+        .then(res=> console.log(res.data))
+
+        // Get User
         try {
-          const res = await axios.get(
-            `http://localhost:5000/users/${user.uid}`
-          );
-          setDBUser(res.data);
+          // const res = await axios.get(
+          //   `http://localhost:5000/users/${user.uid}`,{withCredentials:true}
+          // );
+          // setDBUser(res.data);
+          axios.get(`http://localhost:5000/users/${user.uid}`,{withCredentials:true})
+          .then(res=> setDBUser(res.data))
         } catch (err) {
           console.error("Error fetching user data:", err);
         }
