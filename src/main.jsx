@@ -15,6 +15,8 @@ import EditProfile from './User/EditProfile'
 import OtherProfile from './LayOut/OtherProfile'
 import axios from 'axios'
 import Message from './LayOut/Message'
+import Saved from './LayOut/Saved'
+import Setting from './LayOut/Setting'
 
 
 const router = createBrowserRouter([
@@ -46,6 +48,14 @@ const router = createBrowserRouter([
       {
         path: '/message',
         element: <Message></Message>
+      },
+      {
+        path: '/saved',
+        element: <Saved></Saved>
+      },
+      {
+        path: '/setting',
+        element: <Setting></Setting>
       }
     ]
   },
