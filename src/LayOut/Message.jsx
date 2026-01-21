@@ -18,7 +18,9 @@ const Message = () => {
     const fetchFriends = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:5000/users",{withCredentials:true});
+        const res = await axios.get("http://localhost:4000/users", {
+          withCredentials: true,
+        });
         setFriends(res.data);
       } catch (err) {
         console.error("Error fetching friends:", err);
@@ -38,12 +40,10 @@ const Message = () => {
 
   return (
     <div
-      data-theme="dark"
+      
       className="min-h-screen bg-base-900 text-base-content"
     >
       <div className="container mx-auto p-4 md:p-6">
-        
-
         {/* Main Content */}
         <div className="flex flex-col lg:flex-row bg-base-100 rounded-b-2xl shadow-2xl overflow-hidden h-[calc(100vh-120px)]">
           {/* Left side: Friend List */}
@@ -101,7 +101,6 @@ const Message = () => {
                           {user.name}
                         </p>
                       </p>
-                      
                     </div>
                   </motion.div>
                 ))}
@@ -115,7 +114,7 @@ const Message = () => {
               // friends অ্যারে থেকে selectedFriend খুঁজে বের করা
               (() => {
                 const selectedFriend = friends.find(
-                  (friend) => friend.uid === selectedFriendUid
+                  (friend) => friend.uid === selectedFriendUid,
                 );
 
                 if (!selectedFriend) {

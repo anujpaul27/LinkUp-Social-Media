@@ -13,22 +13,21 @@ const OtherProfile = () => {
   const axiosSecure = useAxios();
 
   // Get Specific User
-  useEffect(()=>{
-      axiosSecure.get(`/users/${uid}`)
-      .then(res=> setUser(res.data))
-  },[])
+  useEffect(() => {
+    axiosSecure.get(`/users/${uid}`).then((res) => setUser(res.data));
+  }, []);
 
   // Get User Post
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/post/${user?.uid}`)
+      .get(`http://localhost:4000/post/${user?.uid}`)
       .then((res) => setUserPosts(res.data));
   }, [user?.uid]);
 
   // Get Following
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/following/${user?.uid}`)
+      .get(`http://localhost:4000/following/${user?.uid}`)
       .then((res) => setFollowing(res.data));
   }, [user?.uid]);
 

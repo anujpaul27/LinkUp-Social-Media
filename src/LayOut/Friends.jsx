@@ -3,19 +3,17 @@ import axios from "axios";
 import { delay, motion } from "framer-motion";
 import { UserContext } from "../Context/ContextProvider";
 import { Link } from "react-router";
-import OtherProfile from "./OtherProfile";
 import useAxios from "../Context/useAxios";
 
 const Friends = () => {
   const [allFriend, setFriend] = useState([]);
   const [active, setActive] = useState([]);
   const { DBUser } = useContext(UserContext);
-  const axiosSecure = useAxios()
+  const axiosSecure = useAxios();
 
   useEffect(() => {
-    // axios.get(`http://localhost:5000/users`,{withCredentials:true}).then((res) => setFriend(res.data));
-    axiosSecure.get('/users')
-    .then(res=> setFriend(res.data))
+    // axios.get(`http://localhost:4000/users`,{withCredentials:true}).then((res) => setFriend(res.data));
+    axiosSecure.get("/users").then((res) => setFriend(res.data));
   }, []);
 
   useEffect(() => {
@@ -30,16 +28,11 @@ const Friends = () => {
     // Update Following count each user
     if (copy[i]) {
       axios
-        .patch(`http://localhost:5000/following/${DBUser?.uid}`, {
+        .patch(`http://localhost:4000/following/${DBUser?.uid}`, {
           FollowingUserUid,
         })
         .then((res) => console.log(res.data));
     }
-  }
-
-  function handleClickableProfile(uid) {
-    console.log(uid);
-    <OtherProfile uid={uid}></OtherProfile>;
   }
 
   return (
@@ -49,36 +42,36 @@ const Friends = () => {
           <motion.div
             initial={{ opacity: 0, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.2 }}
             key={index}
-            className="w-3/4 mx-auto bg-gray-800 py-2 px-2 rounded-lg mt-4"
+            className="lg:w-3/4 md:w-3/4  w-11/12  mx-auto  py-2 px-2 rounded-lg "
           >
             {/* User */}
-            <div className="flex items-center space-x-4  ">
-              <div className="flex-shrink-0">
+            <div className="flex items-center space-x-4 shadow-sm p-3    ">
+              <div>
                 <Link to={`/otherprofile/${user?.uid}`}>
                   <img
-                    className="w-20 rounded-full "
+                    className="lg:w-20 lg:h-20 md:w-20 md:h-20 w-15 h-15  rounded-full object-cover"
                     src={user?.photoURL}
                     alt="profile photo"
                   />
                 </Link>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className=" text-xl font-medium light:text-gray-900 truncate dark:text-white">
+              <div className="flex-1 min-w-0 ">
+                <p className=" text-md lg:text-xl md:text-xl font-medium ">
                   <Link to={`/otherprofile/${user?.uid}`}> {user?.name} </Link>
                 </p>
-                <p className="text-sm text-gray-500 truncate dark:text-gray-400 mt-1">
+                <p className="lg:text-sm md:text-sm text-[12px] text-gray-500 truncate dark:text-gray-400 mt-1">
                   From {user?.address}
                 </p>
-                <p className="text-sm text-gray-500 truncate dark:text-gray-400 mt-1">
+                <p className="lg:text-sm md:text-sm text-[12px] text-gray-500 truncate dark:text-gray-400 ">
                   Work at {user?.workAt}
                 </p>
               </div>
               <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
                 <button
                   onClick={() => handleFollowBtn(index, user?.uid)}
-                  className={`btn ${
+                  className={`btn btn-sm lg:btn md:btn ${
                     !active[index] ? "btn-secondary" : "btn-outline"
                   }`}
                 >

@@ -5,12 +5,12 @@ import {
   onSnapshot, 
   addDoc, 
   serverTimestamp, 
-  query,          // নতুন যোগ করো
-  orderBy         // নতুন যোগ করো
+  query,          
+  orderBy         
 } from 'firebase/firestore';
 import { db } from '../Context/AuthProvider';
 
-// Deterministic conversation ID (সবসময় একই থাকবে)
+// Deterministic conversation ID 
 function getConversationId(uid1, uid2) {
   if (!uid1 || !uid2) return null;
   const u1 = uid1.toLowerCase().trim();
@@ -34,7 +34,7 @@ export function UseChat(currentUserUid, otherUserUid) {
     const convoRef = doc(db, 'conversations', conversationId);
     const messagesRef = collection(convoRef, 'messages');
 
-    // এখানে query + orderBy যোগ করা হলো (পুরনো থেকে নতুন)
+    
     const q = query(messagesRef, orderBy('createdAt', 'asc'));
 
     const unsubscribe = onSnapshot(q, 

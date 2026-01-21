@@ -7,7 +7,6 @@ import {
 import React, { createContext, useEffect, useState } from "react";
 import auth from "./AuthProvider";
 import axios from "axios";
-import useAxios from "./useAxios";
 
 export const UserContext = createContext(null);
 
@@ -21,21 +20,27 @@ const ContextProvider = ({ children }) => {
       if (user) {
         setCurrentUser(user);
 
-        // axios.post('http://localhost:5000/jwt',user,{withCredentials:true})
+        // axios.post('http://localhost:4000/jwt',user,{withCredentials:true})
         // .then(res=> console.log(res.data))
-        
+
         // Create JWT Authentication
-        axios.post('http://localhost:5000/jwt',user,{withCredentials:true})
-        .then(res=> console.log(res.data))
+        axios
+          .post("http://localhost:4000/jwt", user, {
+            withCredentials: true,
+          })
+          .then((res) => console.log(res.data));
 
         // Get User
         try {
           // const res = await axios.get(
-          //   `http://localhost:5000/users/${user.uid}`,{withCredentials:true}
+          //   `http://localhost:4000/users/${user.uid}`,{withCredentials:true}
           // );
           // setDBUser(res.data);
-          axios.get(`http://localhost:5000/users/${user.uid}`,{withCredentials:true})
-          .then(res=> setDBUser(res.data))
+          axios
+            .get(`http://localhost:4000/users/${user.uid}`, {
+              withCredentials: true,
+            })
+            .then((res) => setDBUser(res.data));
         } catch (err) {
           console.error("Error fetching user data:", err);
         }
@@ -47,7 +52,6 @@ const ContextProvider = ({ children }) => {
 
     return () => unsubscribe();
   }, []);
-
 
   function SignUp(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);

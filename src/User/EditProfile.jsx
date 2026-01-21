@@ -25,7 +25,7 @@ export default function EditProfile() {
     if (DBUser?.workAt !== Obj.workAt) updatedUser.workAt = Obj.workAt;
 
     axios
-      .patch(`http://localhost:5000/users/${DBUser?.uid}`, updatedUser)
+      .patch(`http://localhost:4000/users/${DBUser?.uid}`, updatedUser)
       .then((res) => {
         Swal.fire({
           title: "Profile Update Successful.",
@@ -135,7 +135,7 @@ export default function EditProfile() {
               name="DateOfBirth"
               id="default-search"
               className="block w-full h-11 pr-5 pl-12 py-2.5 text-base font-normal shadow-xs text-gray-400 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none"
-              defaultValue={DBUser.DateOfBirth && DBUser.DateOfBirth}
+              defaultValue={DBUser?.DateOfBirth && DBUser?.DateOfBirth}
             />
           </div>
         </div>
@@ -216,12 +216,12 @@ export default function EditProfile() {
                 class="size-6"
               >
                 <path
-                  stroke-linecap="round"
+                  strokeLinecap="round"
                   stroke-linejoin="round"
                   d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                 />
                 <path
-                  stroke-linecap="round"
+                  strokeLinecap="round"
                   stroke-linejoin="round"
                   d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
                 />
@@ -232,7 +232,7 @@ export default function EditProfile() {
               name="address"
               id="default-search"
               className="block w-full h-11 pr-5 pl-12 py-2.5 text-base font-normal shadow-xs text-gray-400 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none"
-              defaultValue={DBUser.address && DBUser.address}
+              defaultValue={DBUser?.address && DBUser?.address}
               placeholder="ex. Dhaka, Bangladesh"
             />
           </div>
@@ -276,7 +276,7 @@ export default function EditProfile() {
               name="phone_number"
               id="default-search"
               className="block w-full h-11 pr-5 pl-12 py-2.5 text-base font-normal shadow-xs text-gray-400 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none"
-              defaultValue={DBUser.phone_number && DBUser.phone_number}
+              defaultValue={DBUser?.phone_number && DBUser?.phone_number}
               placeholder="ex. 016........"
             />
           </div>
@@ -321,7 +321,7 @@ export default function EditProfile() {
               name="workAt"
               id="default-search"
               className="block w-full h-11 pr-5 pl-12 py-2.5 text-base font-normal shadow-xs text-gray-400 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none"
-              defaultValue={DBUser.workAt && DBUser.workAt}
+              defaultValue={DBUser?.workAt && DBUser?.workAt}
               placeholder="Work At "
             />
           </div>
@@ -367,7 +367,7 @@ export default function EditProfile() {
               name="bio"
               id="default-search"
               className="block w-full h-11 pr-5 pl-12 py-2.5 text-base font-normal shadow-xs text-gray-400 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none"
-              defaultValue={DBUser.bio && DBUser.bio}
+              defaultValue={DBUser?.bio && DBUser?.bio}
               placeholder="Enter Bio"
             />
           </div>

@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../Context/ContextProvider";
 import { useNavigate } from "react-router";
-import axios from 'axios';
+import axios from "axios";
 
 function Registration() {
   const [error, setError] = useState("");
-  const { SignUp,SignOut} = useContext(UserContext);
-  const navigation = useNavigate()
+  const { SignUp, SignOut } = useContext(UserContext);
+  const navigation = useNavigate();
 
   // Password validation function
   function validatePassword(password) {
@@ -50,16 +50,20 @@ function Registration() {
 
     SignUp(Obj.email, Obj.password)
       .then((res) => {
-        Obj.uid = res.user.uid;        
-        axios.post('http://localhost:5000/users',Obj)
-        .then (data=> console.log('Register user post success with this user',data.data))
+        Obj.uid = res.user.uid;
+        axios
+          .post("http://localhost:4000/users", Obj)
+          .then((data) =>
+            console.log("Register user post success with this user", data.data),
+          );
 
         // Post Flowing empty data post
-        const friendObj = {uid:res?.user?.uid, following:[], followers:[]}
-        axios.post(`http://localhost:5000/following`,friendObj)
-        .then(res=> console.log('post following data',res.data))
-        
-        navigation('/login')
+        const friendObj = { uid: res?.user?.uid, following: [], followers: [] };
+        axios
+          .post(`http://localhost:4000/following`, friendObj)
+          .then((res) => console.log("post following data", res.data));
+
+        navigation("/login");
         SignOut();
       })
       .catch((error) => {

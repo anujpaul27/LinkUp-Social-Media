@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { UseChat } from "./UseChat";
 
 const Chat = ({ currentUser, otherUser }) => {
-  const { messages, sendMessage, loading } = UseChat(currentUser?.uid, otherUser?.uid);
+  const { messages, sendMessage, loading } = UseChat(
+    currentUser?.uid,
+    otherUser?.uid,
+  );
   const [newMsg, setNewMsg] = useState("");
   const messagesEndRef = useRef(null);
 
@@ -88,8 +91,10 @@ const Chat = ({ currentUser, otherUser }) => {
                   <img
                     src={
                       msg.senderId === currentUser?.uid
-                        ? currentUser?.photoURL || `https://i.pravatar.cc/150?u=${currentUser?.uid}`
-                        : otherUser?.photoURL || `https://i.pravatar.cc/150?u=${otherUser?.uid}`
+                        ? currentUser?.photoURL ||
+                          `https://i.pravatar.cc/150?u=${currentUser?.uid}`
+                        : otherUser?.photoURL ||
+                          `https://i.pravatar.cc/150?u=${otherUser?.uid}`
                     }
                     alt="Avatar"
                   />
@@ -104,7 +109,10 @@ const Chat = ({ currentUser, otherUser }) => {
               </div>
               <div className="chat-footer opacity-50 text-xs">
                 {msg.createdAt instanceof Date
-                  ? msg.createdAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+                  ? msg.createdAt.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
                   : "Sending..."}
               </div>
             </div>
@@ -133,7 +141,12 @@ const Chat = ({ currentUser, otherUser }) => {
           className="btn btn-primary btn-circle"
           disabled={loading || !newMsg.trim()}
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

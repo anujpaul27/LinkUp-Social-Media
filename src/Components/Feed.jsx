@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { UserContext } from "../Context/ContextProvider";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { Link } from "react-router";
 
 const Feed = () => {
   const { DBUser } = useContext(UserContext);
@@ -11,7 +12,7 @@ const Feed = () => {
   // Get all post
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/post`)
+      .get(`http://localhost:4000/post`)
       .then((res) => setAllPosts(res.data))
       .catch((error) => console.log("Error from get posts.", error.message));
   }, []);
@@ -47,7 +48,7 @@ const Feed = () => {
         };
 
         axios
-          .post(`http://localhost:5000/post`, createPost)
+          .post(`http://localhost:4000/post`, createPost)
           .then((res) => console.log(res.data))
           .catch((error) => console.log(error));
       },
@@ -59,7 +60,7 @@ const Feed = () => {
   }
 
   return (
-    <div className="flex-1 max-w-2xl mx-auto py-8 px-4">
+    <div className="flex-1 max-w-2xl mx-auto py-8 lg:px-4 md:px-4">
       {/* Create Post Box */}
       <div className="card bg-base-100 shadow-xl mb-6">
         <div className="card-body">
@@ -101,19 +102,25 @@ const Feed = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="avatar">
+                  {/* Post Heading  */}
                   <div className="w-12 rounded-full">
-                    <img src={post?.userPhoto} alt="User" />
+                    <Link to={`/otherprofile/${post?.uid}`}>
+                      <img src={post?.userPhoto} alt="profile photo" />
+                    </Link>
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-semibold">{post?.userName}</h3>
-                  <p className="text-sm opacity-70">{post?.createAt} · 🌐</p>
+                  <Link to={`otherprofile/${post.uid}`}>
+                    <h3 className="font-semibold">{post?.userName}</h3>
+                  </Link>
+                  <p className="lg:text-sm md:text-sm text-[10px] opacity-70">{post?.createAt} · 🌐</p>
                 </div>
               </div>
               <button className="btn btn-ghost btn-sm btn-circle">⋯</button>
             </div>
 
-            <p className="mt-4 text-lg">{post?.postText}</p>
+            {/* Post Text */}
+            <p className="mt-4 lg:text-lg md:text-md text-sm ">{post?.postText}</p>
 
             {post.imageLink && (
               <figure className="mt-4">
@@ -126,7 +133,7 @@ const Feed = () => {
             )}
 
             <div className="flex justify-between mt-4 pt-4 border-t">
-              <button className="btn btn-ghost flex-1 gap-2 hover:bg-red-50 hover:text-red-600">
+              <button className="btn btn-ghost flex-1 gap-2 hover:bg-red-50 hover:text-red-600 ">
                 ❤️ Like
               </button>
               <button className="btn btn-ghost flex-1 gap-2">💬 Comment</button>

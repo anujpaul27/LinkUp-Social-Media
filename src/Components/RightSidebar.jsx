@@ -4,7 +4,7 @@ const onlineFriends = ["Stark Hound", "Elenor Smith", "Antony Teased"];
 // This component do not show right now 
 const RightBar = () => {
   return (
-    <div className=" xl:block w-60 bg-base-100 shadow-xl p-6 sticky top-20 h-fit">
+    <div className="hidden lg:flex lg:flex-col md:flex md:flex-col xl:block w-60 bg-base-100 shadow-xl p-6 sticky top-20 h-fit">
       <h2 className="text-xl font-bold mb-6">Online Friends</h2>
       <div className="space-y-4">
         {onlineFriends.map((friend, i) => (
