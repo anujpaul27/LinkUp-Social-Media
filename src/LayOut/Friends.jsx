@@ -3,7 +3,7 @@ import axios from "axios";
 import { delay, motion } from "framer-motion";
 import { UserContext } from "../Context/ContextProvider";
 import { Link } from "react-router";
-import useAxios from "../Context/useAxios";
+import useAxios from "../Context/useAxios"; 
 
 const Friends = () => {
   const [allFriend, setFriend] = useState([]);
@@ -13,7 +13,18 @@ const Friends = () => {
 
   useEffect(() => {
     // axios.get(`http://localhost:4000/users`,{withCredentials:true}).then((res) => setFriend(res.data));
-    axiosSecure.get("/users").then((res) => setFriend(res.data));
+    const ManageFollowing = async () => {
+      // get all user
+      const response = await axiosSecure.get("/users");
+      const users= (response.data)  
+      // get following user 
+      const response1 = await axios.get(`http://localhost:4000/following/${DBUser?.uid}`);
+      const UserTotalFollowing=response1.data.following;
+      // show unfollow user with a condition
+      const newAllFriend = users.filter(obj=> !UserTotalFollowing.includes(obj.uid))
+      setFriend(newAllFriend)
+    }
+    ManageFollowing()
   }, []);
 
   useEffect(() => {
@@ -31,7 +42,7 @@ const Friends = () => {
         .patch(`http://localhost:4000/following/${DBUser?.uid}`, {
           FollowingUserUid,
         })
-        .then((res) => console.log(res.data));
+        .then((res) => console.log(res.data)); 
     }
   }
 
@@ -68,11 +79,11 @@ const Friends = () => {
                   Work at {user?.workAt}
                 </p>
               </div>
-              <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+              <div className="inline-flex items-center text-base font-semibold light:text-gray-900 dark:text-white">
                 <button
                   onClick={() => handleFollowBtn(index, user?.uid)}
                   className={`btn btn-sm lg:btn md:btn ${
-                    !active[index] ? "btn-secondary" : "btn-outline"
+                    !active[index] ? "btn-secondary " : "btn-outline"
                   }`}
                 >
                   {!active[index] ? "follow" : "unfollow"}
