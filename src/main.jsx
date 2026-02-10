@@ -16,6 +16,7 @@ import OtherProfile from './LayOut/OtherProfile'
 import Message from './LayOut/Message'
 import Saved from './LayOut/Saved'
 import Setting from './LayOut/Setting'
+import CreatePost from './LayOut/CreatePostPage'
 
 
 const router = createBrowserRouter([
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: '/setting',
         element: <Setting></Setting>
+      },
+      {
+        path: 'CreatePost', 
+        element: <CreatePost> </CreatePost>
       }
     ]
   },

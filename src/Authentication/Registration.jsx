@@ -2,10 +2,11 @@ import { useContext, useState } from "react";
 import { UserContext } from "../Context/ContextProvider";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function Registration() {
   const [error, setError] = useState("");
-  const { SignUp, SignOut } = useContext(UserContext);
+  const { SignUp, SignOut, loading, setLoading } = useContext(UserContext);
   const navigation = useNavigate();
 
   // Password validation function
@@ -34,42 +35,59 @@ function Registration() {
     return "";
   }
 
-  function handleSubmit(event) {
+  // user info check and sent database
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     const form = event.target;
     const formValue = new FormData(form);
     const Obj = Object.fromEntries(formValue.entries());
 
-    const Validation = validatePassword(Obj.password);
-    {
-      if (Validation) {
-        setError(Validation);
-        return;
-      }
+    const validPass = validatePassword(Obj.password);
+    if (validPass) {
+      setError(validPass);
+      setLoading(false); // Add this
+      return;
     }
 
-    SignUp(Obj.email, Obj.password)
-      .then((res) => {
-        Obj.uid = res.user.uid;
-        axios
-          .post("http://localhost:4000/users", Obj)
-          .then((data) =>
-            console.log("Register user post success with this user", data.data),
-          );
+    try {
+      // Image Upload
+      const formData = new FormData();
+      formData.append("image", Obj.photoURL);
 
-        // Post Flowing empty data post
-        const friendObj = { uid: res?.user?.uid, following: [], followers: [] };
-        axios
-          .post(`http://localhost:4000/following`, friendObj)
-          .then((res) => console.log("post following data", res.data));
-
-        navigation("/login");
-        SignOut();
-      })
-      .catch((error) => {
-        setError(error.message);
+      const res = await axios.post("http://localhost:4000/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
-  }
+      Obj.photoURL = res.data.url;
+
+      SignUp(Obj.email, Obj.password)
+        .then((res) => {
+          Obj.uid = res.user.uid;
+          axios.post("http://localhost:4000/users", Obj);
+          const friendObj = {
+            uid: res?.user?.uid,
+            following: [],
+            followers: [],
+          };
+          axios.post("http://localhost:4000/following", friendObj);
+          navigation("/login");
+          SignOut();
+        })
+        .catch((error) => {
+          setError(error.message);
+        })
+        .finally(() => {
+          setLoading(false); // Ensures loading stops in all cases
+        });
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
+  };
+
+  const UpComingFeature = () => {
+    Swal.fire("This Feature Coming Soon!. ");
+  };
 
   return (
     <section className="py-10 bg-base-200">
@@ -128,13 +146,12 @@ function Registration() {
             />
           </div>
 
-          {/* PhotoURL Field */}
-          <div className="form-control">
+          {/* Image upload Field */}
+          <div className="form-control ">
             <input
-              type="text"
+              type="file"
               name="photoURL"
-              placeholder="Enter your photoURL"
-              className="input input-bordered rounded-full w-full"
+              className="input input-bordered rounded-full w-full file-input"
               required
             />
           </div>
@@ -162,7 +179,10 @@ function Registration() {
           {/* Social Login Buttons */}
           <div className="flex justify-around">
             {/* Google */}
-            <button className="btn rounded-full bg-white text-black border-[#e5e5e5]">
+            <p
+              onClick={UpComingFeature}
+              className="btn rounded-full bg-white text-black border-[#e5e5e5]"
+            >
               <svg
                 aria-label="Email icon"
                 width="16"
@@ -182,10 +202,13 @@ function Registration() {
                 </g>
               </svg>
               Login with Google
-            </button>
+            </p>
 
             {/* GitHub */}
-            <button className="btn rounded-full bg-white text-black border-[#e5e5e5]">
+            <p
+              onClick={UpComingFeature}
+              className="btn rounded-full bg-white text-black border-[#e5e5e5]"
+            >
               <svg
                 aria-label="GitHub logo"
                 width="16"
@@ -199,10 +222,15 @@ function Registration() {
                 ></path>
               </svg>
               Login with GitHub
-            </button>
+            </p>
           </div>
         </form>
       </div>
+      {loading && (
+        <div className="flex items-center justify-center h-screen">
+          <span className="loading loading-infinity loading-xl"></span>
+        </div>
+      )}
     </section>
   );
 }

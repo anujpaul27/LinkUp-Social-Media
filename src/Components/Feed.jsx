@@ -113,14 +113,18 @@ const Feed = () => {
                   <Link to={`otherprofile/${post.uid}`}>
                     <h3 className="font-semibold">{post?.userName}</h3>
                   </Link>
-                  <p className="lg:text-sm md:text-sm text-[10px] opacity-70">{post?.createAt} · 🌐</p>
+                  <p className="lg:text-sm md:text-sm text-[10px] opacity-70">
+                    {post?.createAt} · 🌐
+                  </p>
                 </div>
               </div>
               <button className="btn btn-ghost btn-sm btn-circle">⋯</button>
             </div>
 
             {/* Post Text */}
-            <p className="mt-4 lg:text-lg md:text-md text-sm ">{post?.postText}</p>
+            <p className="mt-4 lg:text-lg md:text-md text-sm ">
+              {post?.postText}
+            </p>
 
             {post.imageLink && (
               <figure className="mt-4">

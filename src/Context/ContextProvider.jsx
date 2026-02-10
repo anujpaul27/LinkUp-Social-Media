@@ -28,7 +28,7 @@ const ContextProvider = ({ children }) => {
           .post("http://localhost:4000/jwt", user, {
             withCredentials: true,
           })
-          .then((res) => console.log(res.data));
+          .then((res) => console.log('token create success.'));
 
         // Get User
         try {
@@ -71,6 +71,7 @@ const ContextProvider = ({ children }) => {
     SignOut,
     CurrentUser,
     loading,
+    setLoading,
     DBUser,
   };
   return <UserContext.Provider value={Obj}>{children}</UserContext.Provider>;
