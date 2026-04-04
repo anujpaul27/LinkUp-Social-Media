@@ -26,14 +26,14 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Feed_RightBar></Feed_RightBar> 
+        element: <Feed_RightBar></Feed_RightBar>
       },
       {
         path: '/profile',
         element: <Profile></Profile>
       },
       {
-        path:'editprofile',
+        path: 'editprofile',
         element: <EditProfile></EditProfile>
       },
       {
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
       {
         path: '/otherprofile/:uid',
         element: <OtherProfile></OtherProfile>,
-        loader: ({params}) => {return params.uid}
+        loader: ({ params }) => { return params.uid }
       },
       {
         path: '/message',
@@ -58,7 +58,7 @@ const router = createBrowserRouter([
         element: <Setting></Setting>
       },
       {
-        path: 'CreatePost', 
+        path: 'CreatePost',
         element: <CreatePost> </CreatePost>
       }
     ]
@@ -75,13 +75,13 @@ const router = createBrowserRouter([
     path: '/logout',
     element: <LogOut></LogOut>
   }
-  
+
 ])
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-      <ContextProvider>
-        <RouterProvider router={router}></RouterProvider>
-      </ContextProvider>
+    <ContextProvider>
+      <RouterProvider router={router}></RouterProvider>
+    </ContextProvider>
   </StrictMode>,
 )

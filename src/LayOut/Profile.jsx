@@ -28,14 +28,14 @@ const Profile = () => {
   // Get User Post
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/post/${DBUser?.uid}`)
+      .get(`${import.meta.env.VITE_API_URL}/post/${DBUser?.uid}`)
       .then((res) => setUserPosts(res.data));
   }, [DBUser?.uid]);
 
   // Get Following
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/following/${DBUser?.uid}`)
+      .get(`${import.meta.env.VITE_API_URL}/following/${DBUser?.uid}`)
       .then((res) => setFollowing(res.data));
   }, [DBUser?.uid]);
 

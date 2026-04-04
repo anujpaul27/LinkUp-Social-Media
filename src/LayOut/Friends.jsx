@@ -3,7 +3,7 @@ import axios from "axios";
 import { delay, motion } from "framer-motion";
 import { UserContext } from "../Context/ContextProvider";
 import { Link } from "react-router";
-import useAxios from "../Context/useAxios"; 
+import useAxios from "../Context/useAxios";
 
 const Friends = () => {
   const [allFriend, setFriend] = useState([]);
@@ -12,16 +12,16 @@ const Friends = () => {
   const axiosSecure = useAxios();
 
   useEffect(() => {
-    // axios.get(`http://localhost:4000/users`,{withCredentials:true}).then((res) => setFriend(res.data));
+    // axios.get(`${import.meta.env.VITE_API_URL}/users`,{withCredentials:true}).then((res) => setFriend(res.data));
     const ManageFollowing = async () => {
       // get all user
       const response = await axiosSecure.get("/users");
-      const users= (response.data)  
+      const users = (response.data)
       // get following user 
-      const response1 = await axios.get(`http://localhost:4000/following/${DBUser?.uid}`);
-      const UserTotalFollowing=response1.data.following;
+      const response1 = await axios.get(`${import.meta.env.VITE_API_URL}/following/${DBUser?.uid}`);
+      const UserTotalFollowing = response1.data.following;
       // show unfollow user with a condition
-      const newAllFriend = users.filter(obj=> !UserTotalFollowing.includes(obj.uid))
+      const newAllFriend = users.filter(obj => !UserTotalFollowing.includes(obj.uid))
       setFriend(newAllFriend)
     }
     ManageFollowing()
@@ -39,10 +39,10 @@ const Friends = () => {
     // Update Following count each user
     if (copy[i]) {
       axios
-        .patch(`http://localhost:4000/following/${DBUser?.uid}`, {
+        .patch(`${import.meta.env.VITE_API_URL}/following/${DBUser?.uid}`, {
           FollowingUserUid,
         })
-        .then((res) => console.log(res.data)); 
+        .then((res) => console.log(res.data));
     }
   }
 
@@ -82,9 +82,8 @@ const Friends = () => {
               <div className="inline-flex items-center text-base font-semibold light:text-gray-900 dark:text-white">
                 <button
                   onClick={() => handleFollowBtn(index, user?.uid)}
-                  className={`btn btn-sm lg:btn md:btn ${
-                    !active[index] ? "btn-secondary " : "btn-outline"
-                  }`}
+                  className={`btn btn-sm lg:btn md:btn ${!active[index] ? "btn-secondary " : "btn-outline"
+                    }`}
                 >
                   {!active[index] ? "follow" : "unfollow"}
                 </button>

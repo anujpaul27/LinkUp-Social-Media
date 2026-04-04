@@ -29,7 +29,7 @@ const CreatePost = () => {
       formData.append("image", selectedImage);
 
       const res = await axios.post(
-        "http://localhost:4000/upload/posts",
+        `${import.meta.env.VITE_API_URL}/upload/posts`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -56,7 +56,7 @@ const CreatePost = () => {
     };
 
     try {
-      const res = await axios.post("http://localhost:4000/post", createPost);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/post`, createPost);
       console.log("Post sent successful:", res.data);
       return res.data; // return response for further use
     } catch (error) {

@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react";
 import { UserContext } from "./ContextProvider";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: `${import.meta.env.VITE_API_URL}`,
   withCredentials: true,
 });
 const useAxios = () => {

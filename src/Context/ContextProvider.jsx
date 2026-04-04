@@ -20,12 +20,12 @@ const ContextProvider = ({ children }) => {
       if (user) {
         setCurrentUser(user);
 
-        // axios.post('http://localhost:4000/jwt',user,{withCredentials:true})
+        // axios.post('${import.meta.env.VITE_API_URL}/jwt',user,{withCredentials:true})
         // .then(res=> console.log(res.data))
 
         // Create JWT Authentication
         axios
-          .post("http://localhost:4000/jwt", user, {
+          .post(`${import.meta.env.VITE_API_URL}/jwt`, user, {
             withCredentials: true,
           })
           .then((res) => console.log('token create success.'));
@@ -33,11 +33,11 @@ const ContextProvider = ({ children }) => {
         // Get User
         try {
           // const res = await axios.get(
-          //   `http://localhost:4000/users/${user.uid}`,{withCredentials:true}
+          //   `${import.meta.env.VITE_API_URL}/users/${user.uid}`,{withCredentials:true}
           // );
           // setDBUser(res.data);
           axios
-            .get(`http://localhost:4000/users/${user.uid}`, {
+            .get(`${import.meta.env.VITE_API_URL}/users/${user.uid}`, {
               withCredentials: true,
             })
             .then((res) => setDBUser(res.data));

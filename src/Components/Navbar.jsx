@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../Context/ContextProvider";
 import { Link } from "react-router";
+import SearchUser from "./SearchUser";
 
 const Navbar = () => {
   const { DBUser } = useContext(UserContext);
@@ -17,16 +18,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Middle Section: Search (hidden on mobile) */}
-      <div className="flex-none hidden md:flex">
-        <div className="form-control">
-          <input
-            type="text"
-            placeholder="Search Your Friend..."
-            className="input input-bordered w-48 md:w-64"
-          />
-        </div>
-      </div>
+      <SearchUser/>
 
       {/* Right Section: Icons */}
       <div className="flex-none flex gap-2">

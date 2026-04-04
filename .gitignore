@@ -10,6 +10,9 @@ lerna-debug.log*
 .firebaserc
 firebase.json
 .firebase
+.env
+.env.development
+.env.production
 
 node_modules
 dist

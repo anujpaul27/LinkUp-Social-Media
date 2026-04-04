@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../Context/ContextProvider";
 import axios from "axios";
-import { Link} from "react-router";
+import { Link } from "react-router";
 import Posts from "./Posts";
 
 const Feed = () => {
@@ -11,12 +11,12 @@ const Feed = () => {
   // Get all post
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/post`)
+      .get(`${import.meta.env.VITE_API_URL}/post`)
       .then((res) => setAllPosts(res.data))
       .catch((error) => console.log("Error from get posts.", error.message));
   }, []);
 
-  
+
 
   return (
     <div className="flex-1 max-w-2xl mx-auto py-8 lg:px-4 md:px-4">
@@ -30,11 +30,11 @@ const Feed = () => {
               </div>
             </div>
             <Link className="w-full" to={'/CreatePost'}>
-            <input
-              type="text"
-              placeholder="What's on your mind?"
-              className="input input-bordered w-full bg-base-200"
-            />
+              <input
+                type="text"
+                placeholder="What's on your mind?"
+                className="input input-bordered w-full bg-base-200"
+              />
             </Link>
           </div>
           <div className="divider my-2"></div>
@@ -54,7 +54,7 @@ const Feed = () => {
       </div>
 
       {/* Posts */}
-      {allPosts.map((posts) => <Posts post={posts}></Posts> )}
+      {allPosts.map((posts) => <Posts post={posts}></Posts>)}
     </div>
   );
 };

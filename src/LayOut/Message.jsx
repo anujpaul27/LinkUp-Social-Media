@@ -18,7 +18,7 @@ const Message = () => {
     const fetchFriends = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:4000/users", {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`, {
           withCredentials: true,
         });
         setFriends(res.data);
@@ -40,7 +40,7 @@ const Message = () => {
 
   return (
     <div
-      
+
       className="min-h-screen bg-base-900 text-base-content"
     >
       <div className="container mx-auto p-4 md:p-6">
@@ -74,9 +74,8 @@ const Message = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4 }}
-                    className={`flex items-center space-x-4 p-3 rounded-xl cursor-pointer transition-all  ${
-                      selectedFriendUid === user.uid ? "bg-primary/20" : ""
-                    }`}
+                    className={`flex items-center space-x-4 p-3 rounded-xl cursor-pointer transition-all  ${selectedFriendUid === user.uid ? "bg-primary/20" : ""
+                      }`}
                     onClick={() => handleSelectFriend(user.uid)}
                   >
                     <div className="avatar">

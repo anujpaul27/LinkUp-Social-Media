@@ -20,14 +20,14 @@ const OtherProfile = () => {
   // Get User Post
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/post/${user?.uid}`)
+      .get(`${import.meta.env.VITE_API_URL}/post/${user?.uid}`)
       .then((res) => setUserPosts(res.data));
   }, [user?.uid]);
 
   // Get Following
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/following/${user?.uid}`)
+      .get(`${import.meta.env.VITE_API_URL}/following/${user?.uid}`)
       .then((res) => setFollowing(res.data));
   }, [user?.uid]);
 
