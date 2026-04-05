@@ -7,19 +7,21 @@ import Posts from "./Posts";
 const Feed = () => {
   const { DBUser } = useContext(UserContext);
   const [allPosts, setAllPosts] = useState([]);
+  const [loading, setLoading] = useState(true)
 
   // Get all post
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/post`)
       .then((res) => setAllPosts(res.data))
-      .catch((error) => console.log("Error from get posts.", error.message));
+      .catch((error) => console.log("Error from get posts.", error.message))
+      .finally(()=> setLoading(false))
   }, []);
 
 
 
   return (
-    <div className="flex-1 max-w-2xl mx-auto py-8 lg:px-4 md:px-4">
+    <div className="flex-1 max-w-2xl mx-auto lg:px-4 md:px-4">
       {/* Create Post Box */}
       <div className="card bg-base-100 shadow-xl mb-6">
         <div className="card-body">
@@ -27,7 +29,7 @@ const Feed = () => {
             <div className="avatar">
               <div className="w-12 rounded-full">
                 <img src={DBUser?.photoURL} alt="User" />
-              </div>
+              </div>  
             </div>
             <Link className="w-full" to={'/CreatePost'}>
               <input
@@ -54,7 +56,13 @@ const Feed = () => {
       </div>
 
       {/* Posts */}
-      {allPosts.map((posts) => <Posts post={posts}></Posts>)}
+      {
+        loading?
+        <div class="flex min-h-screen w-full items-center justify-center">
+          <span class="loading loading-spinner text-primary loading-lg"></span>
+        </div>
+      :
+      allPosts.map((posts) => <Posts post={posts}></Posts>)}
     </div>
   );
 };

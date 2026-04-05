@@ -11,9 +11,9 @@ const Posts = ({ post }) => {
   return (
     <motion.div
       key={post._id}
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.3 }}
       className="card bg-base-100 shadow-xl mb-6 hover:shadow-2xl transition-shadow"
     >
       <div className="card-body">

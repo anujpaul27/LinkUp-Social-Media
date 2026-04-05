@@ -8,13 +8,13 @@ const Navbar = () => {
   return (
     <>
     <div className=" ">
-      <section className="navbar bg-base-300 shadow-lg sticky top-0 z-20 w-full lg:mt-0 md:mt-0 mt-10">
+      <section className="navbar bg-base-300 shadow-lg sticky top-0 z-20 w-full ">
         {/* Left Section: Logo + Drawer Button */}
       <div className="flex-1">
         {/* Logo */}
         <div className="text-2xl font-bold text-primary flex gap-1 items-center">
-          <img className="w-8" src="/LinkUpLogo.png" alt="Logo" />
-          <p>LinkUp</p>
+          <img className="lg:w-8 w-4 " src="/LinkUpLogo.png" alt="Logo" />
+          <p className="lg:text-2xl text-sm ">LinkUp</p>
         </div>
       </div>
 
@@ -22,22 +22,6 @@ const Navbar = () => {
 
       {/* Right Section: Icons */}
       <div className="flex-none flex gap-2">
-        {/* Search Icon (mobile only) */}
-        <button className="btn btn-ghost btn-circle md:hidden">
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </button>
 
         {/* Notification */}
         <button className="btn btn-ghost btn-circle mr-5">
@@ -61,7 +45,7 @@ const Navbar = () => {
       </div>
       </section>
 
-      <div className="flex justify-between fixed bg-base-300 top-0  w-full z-30   shadow-md  items-center pt-2  px-5 lg:hidden">
+      <div className="flex justify-between fixed bg-base-300 bottom-0  w-full z-30   shadow-md  items-center   px-5 lg:hidden">
         {/* Only view on mobile phone */} 
         {/* Home */}
         <Link to={'/'}>

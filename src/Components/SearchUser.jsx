@@ -34,7 +34,7 @@ const SearchUser = () => {
     setFilterUser(filteredUser)
   }
   return (
-    <div className="relative w-8/12">
+    <div className="relative w-7/12">
       {/* Input Box */}
       <input
         type="text"
