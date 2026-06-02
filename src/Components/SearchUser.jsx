@@ -9,7 +9,7 @@ const SearchUser = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_URL}/users`, { withCredentials: true })
+      .get(`${import.meta.env.VITE_API_URL}/api/user`, { withCredentials: true })
       .then((res) => {
         setUsers(res.data || []);
       })

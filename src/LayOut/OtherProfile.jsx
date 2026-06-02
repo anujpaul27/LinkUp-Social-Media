@@ -14,7 +14,7 @@ const OtherProfile = () => {
 
   // Get Specific User
   useEffect(() => {
-    axiosSecure.get(`/users/${uid}`).then((res) => setUser(res.data));
+    axiosSecure.get(`api/user/${uid}`).then((res) => setUser(res.data));
   }, []);
 
   // Get User Post

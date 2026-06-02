@@ -110,7 +110,7 @@ const Message = () => {
           {/* Right side: Chat Area */}
           <div className="flex-1 bg-base-100 relative">
             {selectedFriendUid ? (
-              // friends অ্যারে থেকে selectedFriend খুঁজে বের করা
+              // Find selectedFriend form friends array 
               (() => {
                 const selectedFriend = friends.find(
                   (friend) => friend.uid === selectedFriendUid,
@@ -127,7 +127,7 @@ const Message = () => {
                 return (
                   <Chat
                     currentUser={DBUser}
-                    otherUser={selectedFriend} // এখন পুরো অবজেক্ট পাঠানো হচ্ছে
+                    otherUser={selectedFriend} // Now sent all object 
                   />
                 );
               })()

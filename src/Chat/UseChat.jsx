@@ -42,7 +42,7 @@ export function UseChat(currentUserUid, otherUserUid) {
         const msgs = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
-          // Timestamp কে JS Date-এ কনভার্ট করা হলো (UI-তে সহজে ফরম্যাট করার জন্য)
+          
           createdAt: doc.data().createdAt?.toDate?.() || new Date()
         }));
         setMessages(msgs);

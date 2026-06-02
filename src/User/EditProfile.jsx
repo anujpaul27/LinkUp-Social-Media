@@ -25,7 +25,7 @@ export default function EditProfile() {
     if (DBUser?.workAt !== Obj.workAt) updatedUser.workAt = Obj.workAt;
 
     axios
-      .patch(`${import.meta.env.VITE_API_URL}/users/${DBUser?.uid}`, updatedUser)
+      .patch(`${import.meta.env.VITE_API_URL}/api/user/${DBUser?.uid}/update`, updatedUser)
       .then((res) => {
         Swal.fire({
           title: "Profile Update Successful.",

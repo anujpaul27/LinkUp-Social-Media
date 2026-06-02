@@ -37,7 +37,7 @@ const ContextProvider = ({ children }) => {
           // );
           // setDBUser(res.data);
           axios
-            .get(`${import.meta.env.VITE_API_URL}/users/${user.uid}`, {
+            .get(`${import.meta.env.VITE_API_URL}/api/user/${user.uid}/find`, {
               withCredentials: true,
             })
             .then((res) => setDBUser(res.data));

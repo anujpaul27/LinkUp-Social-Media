@@ -29,7 +29,7 @@ const CreatePost = () => {
       formData.append("image", selectedImage);
 
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/upload/posts`,
+        `${import.meta.env.VITE_API_URL}/api/post/image-upload`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

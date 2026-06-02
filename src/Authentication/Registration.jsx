@@ -55,7 +55,7 @@ function Registration() {
       const formData = new FormData();
       formData.append("image", Obj.photoURL);
 
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/upload`, formData, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/pots/auth/registration/image-upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       Obj.photoURL = res.data.url;
@@ -63,7 +63,7 @@ function Registration() {
       SignUp(Obj.email, Obj.password)
         .then((res) => {
           Obj.uid = res.user.uid;
-          axios.post(`${import.meta.env.VITE_API_URL}/users`, Obj);
+          axios.post(`${import.meta.env.VITE_API_URL}/api/user/create-user`, Obj);
           const friendObj = {
             uid: res?.user?.uid,
             following: [],
