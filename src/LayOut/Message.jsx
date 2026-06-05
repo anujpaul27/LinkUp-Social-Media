@@ -18,7 +18,7 @@ const Message = () => {
     const fetchFriends = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`, {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user`, {
           withCredentials: true,
         });
         setFriends(res.data);

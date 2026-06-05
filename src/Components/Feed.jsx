@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../Context/ContextProvider";
 import axios from "axios";
 import { Link } from "react-router";
-import Posts from "./Posts";
+import Posts from "./Post/Posts";
 
 const Feed = () => {
   const { DBUser } = useContext(UserContext);

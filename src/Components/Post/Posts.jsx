@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router";
+import PostLike from "./PostLike";
 
 const Posts = ({ post }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -78,8 +79,8 @@ const Posts = ({ post }) => {
         )}
 
         <div className="flex justify-between mt-4 pt-4 border-t">
-          <button className="btn btn-ghost flex-1 gap-2 hover:bg-red-50 hover:text-red-600 ">
-            ❤️ Like
+          <button className="">
+            <PostLike post={post}></PostLike>
           </button>
           <button className="btn btn-ghost flex-1 gap-2">💬 Comment</button>
           <button className="btn btn-ghost flex-1 gap-2">🔄 Share</button>

@@ -29,7 +29,7 @@ const CreatePost = () => {
       formData.append("image", selectedImage);
 
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/post/image-upload`,
+        `${import.meta.env.VITE_API_URL}/image-upload`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -52,7 +52,6 @@ const CreatePost = () => {
       postText,
       imageLink,
       like: [],
-      createAt: new Date().toDateString(),
     };
 
     try {
