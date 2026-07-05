@@ -73,7 +73,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/logout',
-    element: <LogOut></LogOut>
+    element: <PrivateRoute><LogOut></LogOut></PrivateRoute>
+  },
+  {
+    path: '/logout',
+    element: <PrivateRoute><LogOut></LogOut></PrivateRoute>
   }
 
 ])

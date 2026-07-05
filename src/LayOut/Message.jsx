@@ -1,161 +1,401 @@
-import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { motion } from "framer-motion";
+import { Send, ArrowLeft, Users, Search } from "lucide-react";
+import { io } from "socket.io-client";
 import { UserContext } from "../Context/ContextProvider";
-import { Link } from "react-router-dom";
-import Chat from "../Chat/Chat";
+import axios from "axios";
 
-const Message = () => {
-  const [friends, setFriends] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selectedFriendUid, setSelectedFriendUid] = useState(null);
+export default function Message () {
+  const [socket, setSocket] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [activeReceiver, setActiveReceiver] = useState(null);
+  const [messageText, setMessageText] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const chatEndRef = useRef(null);
+  const [onlineUsersList, setOnlineUsersList] = useState([]);
+  const [isPartnerTyping, setIsPartnerTyping] = useState(false);
+  const typingTimeoutRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  
 
   const { DBUser } = useContext(UserContext);
+  const CURRENT_USER_ID = DBUser?._id; // Insertion Tail a linked list 
 
   // Fetch all users/friends
   useEffect(() => {
+    if (!CURRENT_USER_ID) return;
     const fetchFriends = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user`, {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/${CURRENT_USER_ID}`, {
           withCredentials: true,
         });
-        setFriends(res.data);
+        setUsers(res.data);
       } catch (err) {
         console.error("Error fetching friends:", err);
-        setError("Failed to load friends. Please try again.");
+        
       } finally {
         setLoading(false);
       }
     };
 
     fetchFriends();
+  }, [CURRENT_USER_ID]);
+
+  // Dynamic background color
+  const [bgColor, setBgColor] = useState("#25D366");
+
+  useEffect(() => {
+    const colors = ["#25D366", "#128C7E", "#075E54", "#1F2A33"];
+    const interval = setInterval(() => {
+      setBgColor(colors[Math.floor(Math.random() * colors.length)]);
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
-  // Handle click on user → open chat
-  const handleSelectFriend = (uid) => {
-    setSelectedFriendUid(uid);
+  const moveUserToTop = (partnerId) => {
+    setUsers((prevUsers) => {
+      const targetUser = prevUsers.find((u) => u._id === partnerId);
+      if (!targetUser) return prevUsers;
+      const remainingUsers = prevUsers.filter((u) => u._id !== partnerId);
+      return [targetUser, ...remainingUsers];
+    });
   };
 
-  return (
-    <div
+  // Initialize Socket
+  useEffect(() => {
+    if (!CURRENT_USER_ID) return;
+    const newSocket = io(`${import.meta.env.VITE_API_URL}`);
+    setSocket(newSocket);
 
-      className="min-h-screen bg-base-900 text-base-content"
-    >
-      <div className="container mx-auto p-4 md:p-6">
-        {/* Main Content */}
-        <div className="flex flex-col lg:flex-row bg-base-100 rounded-b-2xl shadow-2xl overflow-hidden h-[calc(100vh-120px)]">
-          {/* Left side: Friend List */}
-          <div className="w-full lg:w-1/3 lg:max-w-xs border-r border-base-300 overflow-y-auto bg-base-200">
-            <div className="p-4 border-b border-base-300">
-              <input
-                type="text"
-                placeholder="Search in chats..."
-                className="input input-bordered w-full bg-base-100"
-              />
+    newSocket.emit("addUserOnline", CURRENT_USER_ID);
+
+    newSocket.on("getOnlineUsers", (users) => {
+      setOnlineUsersList(users);
+    });
+
+    return () => newSocket.disconnect();
+  }, [CURRENT_USER_ID]);
+
+  // Chat History + Socket Listeners
+  useEffect(() => {
+    if (!socket || !activeReceiver) return;
+
+    const markMessagesAsSeen = async () => {
+      try {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/messages/mark-as-seen`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            senderId: activeReceiver._id,
+            receiverId: CURRENT_USER_ID,
+          }),
+        });
+
+        setUsers((prevUsers) =>
+          prevUsers.map((u) =>
+            u._id === activeReceiver._id ? { ...u, unseenCount: 0 } : u
+          )
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    markMessagesAsSeen();
+
+    const fetchChatHistory = async () => {
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/messages/${CURRENT_USER_ID}/${activeReceiver._id}`
+        );
+        const data = await res.json();
+        setMessages(data || []);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchChatHistory();
+
+    socket.emit("joinRoom", {
+      senderId: CURRENT_USER_ID,
+      receiverId: activeReceiver._id,
+    });
+
+    socket.on("receiveMessage", (newMessage) => {
+      if (newMessage) {
+        if (
+          activeReceiver?._id === newMessage.sender ||
+          activeReceiver?._id === newMessage.receiver
+        ) {
+          setMessages((prev) => [...prev, newMessage]);
+        }
+
+        const partnerId =
+          newMessage.sender === CURRENT_USER_ID
+            ? newMessage.receiver
+            : newMessage.sender;
+
+        setUsers((prevUsers) =>
+          prevUsers.map((u) => {
+            if (u._id === partnerId) {
+              const shouldIncrement =
+                newMessage.sender !== CURRENT_USER_ID &&
+                activeReceiver?._id !== partnerId;
+              return {
+                ...u,
+                unseenCount: shouldIncrement ? (u.unseenCount || 0) + 1 : 0,
+              };
+            }
+            return u;
+          })
+        );
+
+        moveUserToTop(partnerId);
+      }
+    });
+
+    socket.on("partnerTyping", (data) => {
+      if (data.senderId === activeReceiver?._id) {
+        setIsPartnerTyping(data.isTyping);
+      }
+    });
+
+    return () => {
+      socket.off("receiveMessage");
+      socket.off("partnerTyping");
+    };
+  }, [activeReceiver, socket, CURRENT_USER_ID]);
+
+  const handleInputChange = (e) => {
+    setMessageText(e.target.value);
+
+    if (!socket || !activeReceiver) return;
+
+    const roomId = [CURRENT_USER_ID, activeReceiver._id].sort().join("-");
+    socket.emit("typing", { roomId, senderId: CURRENT_USER_ID });
+
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
+    typingTimeoutRef.current = setTimeout(() => {
+      socket.emit("stopTyping", { roomId, senderId: CURRENT_USER_ID });
+    }, 3000);
+  };
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (!messageText.trim() || !socket || !activeReceiver) return;
+
+    const messageData = {
+      sender: CURRENT_USER_ID,
+      receiver: activeReceiver._id,
+      text: messageText,
+      messageType: "text",
+    };
+
+    socket.emit("sendMessage", messageData);
+    moveUserToTop(activeReceiver._id);
+    setMessageText("");
+
+    const roomId = [CURRENT_USER_ID, activeReceiver._id].sort().join("-");
+    socket.emit("stopTyping", { roomId, senderId: CURRENT_USER_ID });
+  };
+
+  const filteredUsers = users.filter((user) =>
+    user?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <>
+      {loading ? (
+        <div className="flex min-h-screen w-full items-center justify-center">
+          <span className="loading loading-spinner text-primary loading-lg"></span>
+        </div>
+      ) : (
+        <div className="flex h-screen overflow-hidden bg-[#0A0F14] text-white font-sans">
+          {/* Dynamic Background Overlay */}
+          <motion.div
+            className="absolute inset-0 opacity-10 pointer-events-none"
+            animate={{
+              background: `linear-gradient(135deg, ${bgColor} 0%, #111B21 100%)`,
+            }}
+            transition={{ duration: 5, ease: "easeInOut" }}
+          />
+
+          {/* ====================== SIDEBAR (Users List) ====================== */}
+          <div
+            className={`w-full lg:w-96 border-r border-[#2A3A47] flex flex-col bg-[#1F2A33] absolute lg:relative h-full z-20 transition-transform duration-300 ${
+              activeReceiver ? "-translate-x-full lg:translate-x-0" : "translate-x-0"
+            }`}
+          >
+            
+
+            {/* Search */}
+            <div className="p-4">
+              <div className="relative">
+                <Search className="absolute left-4 top-3 text-[#8696A0]" size={20} />
+                <input
+                  type="text"
+                  placeholder="Search users..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full bg-[#2A3A47] border border-[#3A4A57] focus:border-[#25D366] pl-11 py-3 rounded-2xl text-sm outline-none"
+                />
+              </div>
             </div>
 
-            {loading ? (
-              <div className="flex justify-center items-center h-64">
-                <span className="loading loading-spinner loading-lg text-primary"></span>
-              </div>
-            ) : error ? (
-              <div className="p-6 text-center text-error">{error}</div>
-            ) : friends.length === 0 ? (
-              <div className="p-6 text-center text-base-content/60">
-                No friends found
-              </div>
-            ) : (
-              <div className="p-4 space-y-4">
-                {friends.map((user) => (
-                  <motion.div
-                    key={user.uid}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className={`flex items-center space-x-4 p-3 rounded-xl cursor-pointer transition-all  ${selectedFriendUid === user.uid ? "bg-primary/20" : ""
-                      }`}
-                    onClick={() => handleSelectFriend(user.uid)}
+            {/* Users List */}
+            <div className="flex-1 overflow-y-auto px-2 space-y-1">
+              {filteredUsers?.map((user) => {
+                const isOnline = onlineUsersList.includes(user._id);
+                return (
+                  <button
+                    key={user?._id}
+                    onClick={() => setActiveReceiver(user)}
+                    className={`w-full flex items-center gap-4 p-3 rounded-2xl transition-all hover:bg-[#2A3A47] ${
+                      activeReceiver?._id === user?._id ? "bg-[#2A3A47]" : ""
+                    }`}
                   >
-                    <div className="avatar">
-                      <div className="w-16 rounded-full ring-2 ring-primary/30">
-                        <img
-                          src={
-                            user?.photoURL ||
-                            `https://i.pravatar.cc/300?u=${user.uid}`
-                          }
-                          alt={user.name}
-                          className="object-cover"
-                        />
+                    <div className="relative">
+                      <img
+                        src={user?.photoURL || "/default-avatar.png"}
+                        alt={user?.name}
+                        className={`w-14 h-14 rounded-full object-cover ${isOnline && "border-2 border-[#25D366]/30"}`}
+                      />
+                      {isOnline && (
+                        <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-[#1F2A33]"></div>
+                      )}
+                    </div>
+
+                    <div className="flex-1 text-left">
+                      <p className="font-medium text-lg">{user?.name}</p>
+                      <div className="text-sm text-[#8696A0] truncate">
+                        {user?.unseenCount > 0 ? (
+                          <p className="text-white font-bold">
+                            {user?.unseenCount} unseen
+                          </p>
+                        ) : (
+                          <p className="text-sm mt-1 text-[#8696A0] truncate">
+                            Tap to start chatting
+                          </p>
+                        )}
                       </div>
                     </div>
-
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold truncate text-base-content">
-                        <p
-                          onClick={() => handleSelectFriend(user.uid)}
-                          className="hover:text-primary transition-colors"
-                        >
-                          {user.name}
-                        </p>
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Right side: Chat Area */}
-          <div className="flex-1 bg-base-100 relative">
-            {selectedFriendUid ? (
-              // Find selectedFriend form friends array 
-              (() => {
-                const selectedFriend = friends.find(
-                  (friend) => friend.uid === selectedFriendUid,
-                );
+          {/* ====================== MAIN CHAT AREA ====================== */}
+          <div className="flex-1 flex flex-col h-full relative">
+            {activeReceiver ? (
+              <>
+                {/* Chat Header */}
+                <div className="h-16 bg-[#1F2A33] border-b border-[#2A3A47] flex items-center px-4 lg:px-6 z-10">
+                  <button
+                    onClick={() => setActiveReceiver(null)}
+                    className="mr-3 lg:hidden text-[#8696A0] p-2 -ml-2"
+                  >
+                    <ArrowLeft size={28} />
+                  </button>
 
-                if (!selectedFriend) {
-                  return (
-                    <div className="flex items-center justify-center h-full text-error">
-                      Friend not found
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={activeReceiver.photoURL || "/default-avatar.png"}
+                      alt={activeReceiver.name}
+                      className="w-10 h-10 lg:w-11 lg:h-11 rounded-full object-cover"
+                    />
+                    <div>
+                      <h2 className="font-semibold text-xl">{activeReceiver.name}</h2>
+                      {isPartnerTyping ? (
+                        <p className="text-sm text-[#25D366]">Typing...</p>
+                      ) : onlineUsersList.includes(activeReceiver._id) ? (
+                        <p className="text-sm font-bold text-[#25D366]">online</p>
+                      ) : (
+                        <p className="text-sm font-bold text-[#d32525]">offline</p>
+                      )}
                     </div>
-                  );
-                }
+                  </div>
+                </div>
 
-                return (
-                  <Chat
-                    currentUser={DBUser}
-                    otherUser={selectedFriend} // Now sent all object 
-                  />
-                );
-              })()
-            ) : (
-              <div className="flex flex-col items-center justify-center h-full text-base-content/50">
-                <svg
-                  className="w-24 h-24 mb-6 opacity-40"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                {/* Messages Area */}
+                <div className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6 bg-[#0F1A21]">
+                  {messages?.map((msg, index) => {
+                    const isMe = msg.sender === CURRENT_USER_ID;
+                    return (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={`flex ${isMe ? "justify-end" : "justify-start"}`}
+                      >
+                        <div
+                          className={`max-w-[85%] lg:max-w-[70%] px-5 py-3 rounded-3xl ${
+                            isMe
+                              ? "bg-[#25D366] text-black rounded-br-none"
+                              : "bg-[#2A3A47] text-white rounded-bl-none"
+                          }`}
+                        >
+                          <p className="text-[17px] leading-relaxed">{msg.text}</p>
+                          <p className="text-xs mt-1 opacity-70 text-right">
+                            {new Date(msg.createdAt || Date.now()).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </p>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                  <div ref={chatEndRef} />
+                </div>
+
+                {/* Message Input */}
+                <form
+                  onSubmit={handleSendMessage}
+                  className="p-4 lg:p-5 bg-[#1F2A33] border-t border-[#2A3A47]"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-                <p className="text-xl font-medium">
-                  Select a friend to start chatting
+                  <div className="flex gap-3">
+                    <input
+                      type="text"
+                      value={messageText}
+                      onChange={(e) => {
+                        setMessageText(e.target.value);
+                        handleInputChange(e);
+                      }}
+                      placeholder={`Message ${activeReceiver.name}...`}
+                      className="flex-1 bg-[#2A3A47] border border-[#3A4A57] focus:border-[#25D366] rounded-3xl px-6 py-4 outline-none text-lg"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!messageText.trim()}
+                      className="bg-[#25D366] hover:bg-[#20C258] disabled:bg-[#3A4A57] w-14 h-14 rounded-3xl flex items-center justify-center transition-all active:scale-95"
+                    >
+                      <Send size={24} className="text-black" />
+                    </button>
+                  </div>
+                </form>
+              </>
+            ) : (
+              /* Empty State - Mobile Friendly */
+              <div className="flex-1 flex flex-col items-center justify-center text-center px-8 lg:hidden">
+                <div className="text-8xl mb-8 opacity-40">💬</div>
+                <h2 className="text-4xl font-light text-white mb-4">Welcome to WhatsApp</h2>
+                <p className="text-[#8696A0] text-xl max-w-md">
+                  Select a user from the list to start chatting
                 </p>
               </div>
             )}
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
-};
-
-export default Message;
+}

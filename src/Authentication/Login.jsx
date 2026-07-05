@@ -66,6 +66,11 @@ function Login() {
             <p className="text-red-500 text-sm flex justify-center ">{error}</p>
           )}
 
+          <p className="text-gray-300 text-sm">
+            Default login email: admin@linkup.com<br />
+            password: Admin#@12
+          </p>
+
           {/* Forget password */}
           <div className="flex justify-between items-center">
             <button className="btn btn-link text-white ">Forget Password</button>
@@ -80,7 +85,7 @@ function Login() {
               type="submit"
               className={`btn ${!loading && 'btn-primary'} flex-1 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all `}
             >
-              Submit
+              {loading ? "Logging in..." : "Login"}
               {loading && 
                 <svg
                 className="animate-spin h-5 w-5 text-white"

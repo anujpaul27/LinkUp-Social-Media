@@ -2,9 +2,11 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router";
 import PostLike from "./PostLike";
+import CommentPost from "./CommentPost";
 
 const Posts = ({ post }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isCommentDiv, setIsCommentDiv] = useState(false);
 
   const words = (post?.postText || "").split(" ");
   const preview = words.slice(0, 20).join(" ");
@@ -68,6 +70,7 @@ const Posts = ({ post }) => {
           )}
         </div>
 
+        {/* Post Image area */}
         {post.imageLink && (
           <figure className="mt-4">
             <img
@@ -78,13 +81,22 @@ const Posts = ({ post }) => {
           </figure>
         )}
 
+        {/* Post Action button like,comment and share */}
         <div className="flex justify-between mt-4 pt-4 border-t">
-          <button className="">
+          <button className="btn btn-ghost flex-1 gap-2">
             <PostLike post={post}></PostLike>
           </button>
-          <button className="btn btn-ghost flex-1 gap-2">💬 Comment</button>
+          <button
+            onClick={() => setIsCommentDiv(!isCommentDiv)}
+            className="btn btn-ghost flex-1 gap-2"
+          >
+            💬 Comment
+          </button>
           <button className="btn btn-ghost flex-1 gap-2">🔄 Share</button>
         </div>
+
+        {isCommentDiv && <CommentPost post={post}></CommentPost>}
+
       </div>
     </motion.div>
   );

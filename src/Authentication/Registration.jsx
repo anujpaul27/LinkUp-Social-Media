@@ -13,11 +13,15 @@ function Registration() {
 
   // Password validation
   const validatePassword = (password) => {
-    if (password.length < 8) return "Password must be at least 8 characters long.";
-    if (!/[A-Z]/.test(password)) return "Password must contain at least one uppercase letter.";
-    if (!/[a-z]/.test(password)) return "Password must contain at least one lowercase letter.";
-    if (!/[0-9]/.test(password)) return "Password must contain at least one number.";
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) 
+    if (password.length < 8)
+      return "Password must be at least 8 characters long.";
+    if (!/[A-Z]/.test(password))
+      return "Password must contain at least one uppercase letter.";
+    if (!/[a-z]/.test(password))
+      return "Password must contain at least one lowercase letter.";
+    if (!/[0-9]/.test(password))
+      return "Password must contain at least one number.";
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password))
       return "Password must contain at least one special character.";
     return "";
   };
@@ -27,8 +31,7 @@ function Registration() {
     setError("");
     setIsSubmitting(true);
 
-    const form = e.target;
-    const formData = new FormData(form);
+    const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
     // Validation
@@ -47,7 +50,7 @@ function Registration() {
       const imgRes = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/registration/image-upload`,
         imageFormData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        { headers: { "Content-Type": "multipart/form-data" } },
       );
 
       const photoURL = imgRes.data.url;
@@ -65,26 +68,30 @@ function Registration() {
         photoURL,
       };
 
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/user/create-user`, userData);
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/user/create-user`,
+        userData,
+      );
 
       // 4. Create social/following document
-      const friendObj = { uid, following: [], followers: [] };
-      await axios.post(`${import.meta.env.VITE_API_URL}/following`, friendObj);
+      // const friendObj = { uid, following: [], followers: [] };
+      // await axios.post(`${import.meta.env.VITE_API_URL}/following`, friendObj);
 
       Swal.fire({
         icon: "success",
         title: "Registration Successful!",
         text: "Please login to continue",
-        timer: 2000,
+        timer: 1000,
         showConfirmButton: false,
       });
-
-      form.reset();
       navigate("/login");
-
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || err.message || "Registration failed. Please try again.");
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Registration failed. Please try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -144,6 +151,11 @@ function Registration() {
 
             {/* Date of Birth */}
             <div className="form-control">
+              <label className="label">
+                <span className="label-text text-gray-300">
+                  Date of Birth
+                </span>
+              </label>
               <input
                 type="date"
                 name="DateOfBirth"
@@ -155,7 +167,9 @@ function Registration() {
             {/* Profile Picture */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text text-gray-300">Profile Picture</span>
+                <span className="label-text text-gray-300">
+                  Profile Picture
+                </span>
               </label>
               <input
                 type="file"
@@ -206,8 +220,11 @@ function Registration() {
               onClick={handleComingSoon}
               className="btn bg-white text-black hover:bg-gray-100 border border-gray-300 rounded-full flex items-center gap-2"
             >
-              <img src="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png" 
-                   alt="Google" className="w-5 h-5" />
+              <img
+                src="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png"
+                alt="Google"
+                className="w-5 h-5"
+              />
               Google
             </button>
 
@@ -215,7 +232,12 @@ function Registration() {
               onClick={handleComingSoon}
               className="btn bg-white text-black hover:bg-gray-100 border border-gray-300 rounded-full flex items-center gap-2"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 22c-5.523 0-10-4.477-10-10s4.477-10 10-10 10 4.477 10 10-4.477 10-10 10zm-2-15.5l7 7-7 7v-14z" />
               </svg>
               GitHub

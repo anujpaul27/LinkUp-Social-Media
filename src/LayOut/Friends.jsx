@@ -19,16 +19,14 @@ const Friends = () => {
       setLoading(true)
       const response = await axiosSecure.get("/api/user");
       const users = (response.data)
-      console.log("all user", users)
       setLoading(false)
 
       // get following user 
       const response1 = await axios.get(`${import.meta.env.VITE_API_URL}/following/${DBUser?.uid}`);
-      const UserTotalFollowing = response1.data.following;
-      console.log(UserTotalFollowing)
+      const UserTotalFollowing = response1?.data?.following || [];
 
       // show unfollow user with a condition
-      const newAllFriend = users.filter(obj => !UserTotalFollowing.includes(obj.uid))
+      const newAllFriend = users.filter(obj => !UserTotalFollowing.includes(obj?.uid))
       setFriend(newAllFriend)
     }
     ManageFollowing()
